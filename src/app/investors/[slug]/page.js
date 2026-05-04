@@ -11,7 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { HugeiconsIcon } from '@hugeicons/react';
-import { ArrowRight01Icon, Alert02Icon } from '@hugeicons/core-free-icons';
+import { ArrowRight01Icon, Alert02Icon, Linkedin01Icon, GlobeIcon } from '@hugeicons/core-free-icons';
 
 export async function generateStaticParams() {
   return investors.map(inv => ({ slug: inv.slug }));
@@ -65,8 +65,8 @@ export default function InvestorPage({ params, searchParams }) {
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       {/* Hero card */}
-      <Card className="mb-6">
-        <CardContent className="flex items-start gap-4 min-w-0">
+      <Card className="mb-6 relative">
+        <CardContent className="flex items-start gap-4 min-w-0 sm:pr-44">
           <InvestorLogo investor={inv} className="w-14 h-14 rounded-lg text-lg" />
           <div className="min-w-0">
             <div className="flex items-center gap-2 flex-wrap mb-1">
@@ -86,6 +86,26 @@ export default function InvestorPage({ params, searchParams }) {
             <p className="text-xs/relaxed text-muted-foreground mt-3 max-w-lg">{inv.description}</p>
           </div>
         </CardContent>
+        <div className="flex items-center gap-2 px-6 pb-6 pt-0 sm:absolute sm:top-4 sm:right-4 sm:p-0">
+          {inv.domain && (
+            <Button asChild variant="outline" size="sm">
+              <a href={`https://${inv.domain}`} target="_blank" rel="noopener noreferrer">
+                <HugeiconsIcon icon={GlobeIcon} strokeWidth={2} />
+                Website
+              </a>
+            </Button>
+          )}
+          <Button asChild variant="outline" size="sm">
+            <a
+              href={`https://www.linkedin.com/company/${inv.slug}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <HugeiconsIcon icon={Linkedin01Icon} strokeWidth={2} />
+              LinkedIn
+            </a>
+          </Button>
+        </div>
       </Card>
 
       {/* Metrics grid */}
