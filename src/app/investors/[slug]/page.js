@@ -34,10 +34,6 @@ export default function InvestorPage({ params, searchParams }) {
   const inv = getInvestorBySlug(params.slug);
   if (!inv) notFound();
 
-  const peers = investors
-    .filter(i => i.id !== inv.id && i.stage === inv.stage)
-    .slice(0, 3);
-
   const stages = parseFilterValues(searchParams?.stage);
   const sectors = parseFilterValues(searchParams?.sector);
   const geographies = parseFilterValues(searchParams?.geography);
@@ -176,38 +172,6 @@ export default function InvestorPage({ params, searchParams }) {
           <div className="grid grid-cols-3 gap-3">
             {inv.notablePortfolio.slice(0, 9).map(company => (
               <PortfolioCompanyCard key={company} name={company} />
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* Peer comparison */}
-      {peers.length > 0 && (
-        <section className="mb-6">
-          <h2 className="font-heading text-base font-semibold text-foreground mb-4">
-            Similar-stage investors
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            {peers.map(peer => (
-              <Link
-                key={peer.id}
-                href={filterQs ? `/investors/${peer.slug}?${filterQs}` : `/investors/${peer.slug}`}
-                className="group"
-              >
-                <Card className="hover:ring-foreground/20 transition-colors">
-                  <CardContent className="flex items-center gap-3">
-                    <InvestorLogo investor={peer} className="w-8 h-8 rounded-md text-[0.625rem]" />
-                    <div className="min-w-0">
-                      <p className="text-sm font-medium text-foreground truncate group-hover:underline underline-offset-2">
-                        {peer.name}
-                      </p>
-                      <p className="text-[0.625rem] text-muted-foreground">
-                        #{peer.rank} · {peer.stage}
-                      </p>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
             ))}
           </div>
         </section>
