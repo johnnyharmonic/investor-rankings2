@@ -14,10 +14,6 @@ export default function Header() {
             <span className="font-bold text-lg text-gray-900 tracking-tight">
               Investor Rankings
             </span>
-            <span className="hidden sm:inline-flex items-center gap-1 text-xs text-gray-500 border border-gray-200 rounded-full px-2 py-0.5">
-              <span className="w-2 h-2 rounded-full bg-uchicago-maroon inline-block" />
-              × UChicago
-            </span>
           </Link>
 
           {/* Desktop nav */}
