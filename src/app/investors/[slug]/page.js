@@ -156,9 +156,9 @@ export default function InvestorPage({ params, searchParams }) {
                   )}
                 </CardContent>
                 <div className="pointer-events-none absolute inset-0 z-10">
-                  <div className="absolute inset-0 bg-card/0 backdrop-blur-0 transition-[backdrop-filter,background-color] duration-100 group-hover:bg-card/80 group-hover:backdrop-blur-sm" />
+                  <div className="absolute inset-0 bg-foreground/0 backdrop-blur-0 transition-[backdrop-filter,background-color] duration-100 group-hover:bg-foreground/50 group-hover:backdrop-blur-sm" />
                   <div className="absolute inset-0 flex items-center px-4 opacity-0 transition-opacity duration-100 group-hover:opacity-100">
-                    <p className="text-xs/relaxed text-foreground">{metric.description}</p>
+                    <p className="text-xs/relaxed text-background">{metric.description}</p>
                   </div>
                 </div>
               </Card>

@@ -17,10 +17,10 @@ export default function Header() {
           </Link>
 
           <nav className="hidden md:flex items-center gap-1">
-            <Button asChild variant="ghost" size="sm">
+            <Button asChild variant="ghost" size="lg">
               <Link href="/methodology">About</Link>
             </Button>
-            <Button asChild size="sm" className="ml-2">
+            <Button asChild size="lg" className="ml-2">
               <a href="https://harmonic.ai" target="_blank" rel="noopener noreferrer">
                 Explore Harmonic
               </a>
@@ -40,10 +40,10 @@ export default function Header() {
 
         {menuOpen && (
           <div className="md:hidden border-t border-border py-2 flex flex-col gap-1">
-            <Button asChild variant="ghost" size="sm" className="justify-start">
+            <Button asChild variant="ghost" size="lg" className="justify-start">
               <Link href="/methodology" onClick={() => setMenuOpen(false)}>About</Link>
             </Button>
-            <Button asChild size="sm" className="justify-start">
+            <Button asChild size="lg" className="justify-start">
               <a href="https://harmonic.ai" target="_blank" rel="noopener noreferrer">
                 Explore Harmonic
               </a>
