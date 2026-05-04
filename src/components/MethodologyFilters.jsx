@@ -3,11 +3,7 @@ import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { STAGES, SECTORS, GEOGRAPHIES } from '@/data/investors';
 import { Button } from '@/components/ui/button';
 import MultiSelect from '@/components/MultiSelect';
-
-export function parseFilterValues(raw) {
-  if (!raw) return [];
-  return String(raw).split(',').map(s => s.trim()).filter(Boolean);
-}
+import { parseFilterValues } from '@/lib/filters';
 
 export default function MethodologyFilters() {
   const router = useRouter();
@@ -18,7 +14,7 @@ export default function MethodologyFilters() {
   const sectors = parseFilterValues(searchParams.get('sector'));
   const geographies = parseFilterValues(searchParams.get('geography'));
 
-  const hasFilters = stages.length || sectors.length || geographies.length;
+  const hasFilters = stages.length > 0 || sectors.length > 0 || geographies.length > 0;
 
   function update(key, values) {
     const params = new URLSearchParams(searchParams.toString());
@@ -61,7 +57,7 @@ export default function MethodologyFilters() {
         placeholder="Location"
       />
       {hasFilters && (
-        <Button variant="ghost" size="sm" onClick={clear} className="sm:ml-auto">
+        <Button variant="ghost" size="sm" onClick={clear}>
           Clear
         </Button>
       )}

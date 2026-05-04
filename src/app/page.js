@@ -3,7 +3,8 @@ import { METRICS, getFilteredInvestors } from '@/data/investors';
 import InvestorSearch from '@/components/InvestorSearch';
 import InvestorLogo from '@/components/InvestorLogo';
 import BrandChip from '@/components/BrandChip';
-import MethodologyFilters, { parseFilterValues } from '@/components/MethodologyFilters';
+import MethodologyFilters from '@/components/MethodologyFilters';
+import { parseFilterValues } from '@/lib/filters';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
@@ -74,10 +75,10 @@ export default function HomePage({ searchParams }) {
         <div className="mb-6 flex items-end justify-between gap-4 flex-wrap">
           <div>
             <h2 className="font-heading text-2xl font-semibold text-foreground tracking-tight mb-1">
-              Pick a methodology
+              Rankings, by outcome metrics
             </h2>
             <p className="text-sm text-muted-foreground">
-              Each card ranks investors by a single outcome metric. Click to explore.
+              Each card ranks investors by a single outcome metric.
             </p>
           </div>
           <Button asChild variant="link" size="sm">

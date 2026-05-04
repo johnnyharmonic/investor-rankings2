@@ -1,9 +1,12 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import { getInvestorBySlug, investors, METRICS, getMetricBreakdown } from '@/data/investors';
+import { getInvestorBySlug, investors, METRICS, getMetricBreakdown, getFilteredInvestors } from '@/data/investors';
+import { parseFilterValues } from '@/lib/filters';
 import CorrectionForm from '@/components/CorrectionForm';
 import InvestorLogo from '@/components/InvestorLogo';
+import MethodologyFilters from '@/components/MethodologyFilters';
 import PortfolioCompanyCard from '@/components/PortfolioCompanyCard';
+import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -27,13 +30,37 @@ export async function generateMetadata({ params }) {
   };
 }
 
-export default function InvestorPage({ params }) {
+export default function InvestorPage({ params, searchParams }) {
   const inv = getInvestorBySlug(params.slug);
   if (!inv) notFound();
 
   const peers = investors
     .filter(i => i.id !== inv.id && i.stage === inv.stage)
     .slice(0, 3);
+
+  const stages = parseFilterValues(searchParams?.stage);
+  const sectors = parseFilterValues(searchParams?.sector);
+  const geographies = parseFilterValues(searchParams?.geography);
+
+  const filterParams = new URLSearchParams();
+  if (stages.length) filterParams.set('stage', stages.join(','));
+  if (sectors.length) filterParams.set('sector', sectors.join(','));
+  if (geographies.length) filterParams.set('geography', geographies.join(','));
+  const filterQs = filterParams.toString();
+
+  // Compute this investor's rank for each metric within the current filter set.
+  // Falls back to their position in the unfiltered ranking when they don't match.
+  const ranks = Object.fromEntries(
+    Object.values(METRICS).map(metric => {
+      const filtered = getFilteredInvestors({ stage: stages, sector: sectors, geography: geographies, sortBy: metric.id, sortDir: 'desc' });
+      let idx = filtered.findIndex(i => i.id === inv.id);
+      if (idx === -1) {
+        const all = getFilteredInvestors({ sortBy: metric.id, sortDir: 'desc' });
+        idx = all.findIndex(i => i.id === inv.id);
+      }
+      return [metric.id, idx >= 0 ? idx + 1 : null];
+    })
+  );
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
@@ -64,25 +91,42 @@ export default function InvestorPage({ params }) {
       {/* Metrics grid */}
       <section className="mb-6">
         <h2 className="font-heading text-base font-semibold text-foreground mb-4">Performance metrics</h2>
+        <MethodologyFilters />
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
           {Object.values(METRICS).map(metric => {
             const value = inv.metrics[metric.id];
             const display = metric.unit === '%' ? `${value}%` : `${value} mo`;
             const breakdown = getMetricBreakdown(inv, metric.id);
+            const rank = ranks[metric.id];
             return (
               <Card key={metric.id} className="group relative hover:ring-foreground/20 transition-colors">
                 <CardContent>
-                  <div className="flex items-start justify-between mb-2">
-                    <p className="text-[0.625rem] font-medium text-muted-foreground leading-tight pr-2">
+                  <div className="flex items-start justify-between gap-2 mb-2">
+                    <p className="text-[0.625rem] font-medium text-muted-foreground leading-tight">
                       {metric.fullLabel}
                     </p>
-                    {metric.caveat && (
-                      <HugeiconsIcon
-                        icon={Alert02Icon}
-                        strokeWidth={2}
-                        className="size-3 text-amber-500 flex-shrink-0"
-                      />
-                    )}
+                    <div className="flex items-center gap-1.5 flex-shrink-0">
+                      {metric.caveat && (
+                        <HugeiconsIcon
+                          icon={Alert02Icon}
+                          strokeWidth={2}
+                          className="size-3 text-amber-500"
+                        />
+                      )}
+                      {rank !== null && (
+                        <span
+                          className={cn(
+                            'inline-flex items-center px-1.5 py-0.5 rounded-md text-[0.625rem] font-semibold tabular-nums',
+                            rank <= 3
+                              ? 'bg-emerald-100 text-emerald-700'
+                              : 'bg-muted text-muted-foreground'
+                          )}
+                          title={`Rank #${rank} on ${metric.fullLabel}`}
+                        >
+                          #{rank}
+                        </span>
+                      )}
+                    </div>
                   </div>
                   <p className="font-heading text-2xl font-bold text-foreground">{display}</p>
                   {breakdown && (
@@ -125,7 +169,11 @@ export default function InvestorPage({ params }) {
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {peers.map(peer => (
-              <Link key={peer.id} href={`/investors/${peer.slug}`} className="group">
+              <Link
+                key={peer.id}
+                href={filterQs ? `/investors/${peer.slug}?${filterQs}` : `/investors/${peer.slug}`}
+                className="group"
+              >
                 <Card className="hover:ring-foreground/20 transition-colors">
                   <CardContent className="flex items-center gap-3">
                     <InvestorLogo investor={peer} className="w-8 h-8 rounded-md text-[0.625rem]" />

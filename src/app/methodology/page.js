@@ -25,12 +25,24 @@ export default function MethodologyPage() {
         </p>
         <div className="flex items-center gap-3 mt-5 flex-wrap">
           <div className="inline-flex items-center gap-2 rounded-full bg-muted px-3 py-1.5">
-            <div className="w-3.5 h-3.5 bg-harmonic-500 rounded flex items-center justify-center text-white text-[0.5rem] font-bold">H</div>
+            <span className="w-3.5 h-3.5 rounded bg-card ring-1 ring-border flex items-center justify-center overflow-hidden">
+              <img
+                src="https://icons.duckduckgo.com/ip3/harmonic.ai.ico"
+                alt="Harmonic logo"
+                className="w-full h-full object-contain"
+              />
+            </span>
             <span className="text-[0.625rem] font-medium text-foreground">Harmonic — Data</span>
           </div>
           <span className="text-muted-foreground">×</span>
           <div className="inline-flex items-center gap-2 rounded-full bg-muted px-3 py-1.5">
-            <div className="w-3.5 h-3.5 bg-uchicago-maroon rounded flex items-center justify-center text-white text-[0.5rem] font-bold">U</div>
+            <span className="w-3.5 h-3.5 rounded bg-card ring-1 ring-border flex items-center justify-center overflow-hidden">
+              <img
+                src="https://icons.duckduckgo.com/ip3/uchicago.edu.ico"
+                alt="University of Chicago logo"
+                className="w-full h-full object-contain"
+              />
+            </span>
             <span className="text-[0.625rem] font-medium text-foreground">UChicago — Methodology</span>
           </div>
         </div>

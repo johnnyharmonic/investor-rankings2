@@ -5,7 +5,8 @@ import { useSearchParams } from 'next/navigation';
 import { getFilteredInvestors } from '@/data/investors';
 import { Card } from '@/components/ui/card';
 import InvestorLogo from '@/components/InvestorLogo';
-import MethodologyFilters, { parseFilterValues } from '@/components/MethodologyFilters';
+import MethodologyFilters from '@/components/MethodologyFilters';
+import { parseFilterValues } from '@/lib/filters';
 
 const LOWER_IS_BETTER = new Set(['m2', 'm7']);
 const TABLE_LIMIT = 25;
@@ -17,6 +18,14 @@ export default function MethodologyRankingsList({ metric }) {
   const geographies = parseFilterValues(searchParams.get('geography'));
 
   const lowerIsBetter = LOWER_IS_BETTER.has(metric.id);
+
+  const filterQs = (() => {
+    const params = new URLSearchParams();
+    if (stages.length) params.set('stage', stages.join(','));
+    if (sectors.length) params.set('sector', sectors.join(','));
+    if (geographies.length) params.set('geography', geographies.join(','));
+    return params.toString();
+  })();
 
   // Mock-data simulation: real data is dynamic enough that any filter combo yields ≥ TABLE_LIMIT
   // matches. Here, we show top filtered matches first, then pad with the next-best non-matches
@@ -77,7 +86,7 @@ export default function MethodologyRankingsList({ metric }) {
               return (
                 <li key={inv.id}>
                   <Link
-                    href={`/investors/${inv.slug}`}
+                    href={filterQs ? `/investors/${inv.slug}?${filterQs}` : `/investors/${inv.slug}`}
                     className="flex items-center gap-4 px-4 py-3 hover:bg-accent/50 transition-colors group"
                   >
                     <div className="w-10 flex-shrink-0">
