@@ -1,92 +1,151 @@
-'use client';
-import { Dialog as RadixDialog } from 'radix-ui';
-import { cn } from '@/lib/utils';
+"use client"
 
-function Dialog({ ...props }) {
-  return <RadixDialog.Root {...props} />;
+import * as React from "react"
+import { Dialog as DialogPrimitive } from "radix-ui"
+
+import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
+import { HugeiconsIcon } from "@hugeicons/react"
+import { Cancel01Icon } from "@hugeicons/core-free-icons"
+
+function Dialog({
+  ...props
+}) {
+  return <DialogPrimitive.Root data-slot="dialog" {...props} />;
 }
 
-function DialogTrigger({ ...props }) {
-  return <RadixDialog.Trigger {...props} />;
+function DialogTrigger({
+  ...props
+}) {
+  return <DialogPrimitive.Trigger data-slot="dialog-trigger" {...props} />;
 }
 
-function DialogPortal({ ...props }) {
-  return <RadixDialog.Portal {...props} />;
+function DialogPortal({
+  ...props
+}) {
+  return <DialogPrimitive.Portal data-slot="dialog-portal" {...props} />;
 }
 
-function DialogClose({ ...props }) {
-  return <RadixDialog.Close {...props} />;
+function DialogClose({
+  ...props
+}) {
+  return <DialogPrimitive.Close data-slot="dialog-close" {...props} />;
 }
 
-function DialogOverlay({ className, ...props }) {
+function DialogOverlay({
+  className,
+  ...props
+}) {
   return (
-    <RadixDialog.Overlay
+    <DialogPrimitive.Overlay
+      data-slot="dialog-overlay"
       className={cn(
-        'fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
+        "fixed inset-0 isolate z-50 bg-black/80 duration-100 supports-backdrop-filter:backdrop-blur-xs data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0",
         className
       )}
-      {...props}
-    />
+      {...props} />
   );
 }
 
-function DialogContent({ className, children, ...props }) {
+function DialogContent({
+  className,
+  children,
+  showCloseButton = true,
+  ...props
+}) {
   return (
     <DialogPortal>
       <DialogOverlay />
-      <RadixDialog.Content
+      <DialogPrimitive.Content
+        data-slot="dialog-content"
         className={cn(
-          'fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border border-border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg',
+          "fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-4 rounded-xl bg-popover p-4 text-xs/relaxed text-popover-foreground ring-1 ring-foreground/10 duration-100 outline-none sm:max-w-sm data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95",
           className
         )}
-        {...props}
-      >
+        {...props}>
         {children}
-        <RadixDialog.Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-            fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-            className="h-4 w-4" aria-hidden="true">
-            <path d="M18 6 6 18" /><path d="m6 6 12 12" />
-          </svg>
-          <span className="sr-only">Close</span>
-        </RadixDialog.Close>
-      </RadixDialog.Content>
+        {showCloseButton && (
+          <DialogPrimitive.Close data-slot="dialog-close" asChild>
+            <Button variant="ghost" className="absolute top-2 right-2" size="icon-sm">
+              <HugeiconsIcon icon={Cancel01Icon} strokeWidth={2} />
+              <span className="sr-only">Close</span>
+            </Button>
+          </DialogPrimitive.Close>
+        )}
+      </DialogPrimitive.Content>
     </DialogPortal>
   );
 }
 
-function DialogHeader({ className, ...props }) {
-  return <div className={cn('flex flex-col space-y-1.5 text-center sm:text-left', className)} {...props} />;
-}
-
-function DialogFooter({ className, ...props }) {
+function DialogHeader({
+  className,
+  ...props
+}) {
   return (
     <div
-      className={cn('flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2', className)}
-      {...props}
-    />
+      data-slot="dialog-header"
+      className={cn("flex flex-col gap-1", className)}
+      {...props} />
   );
 }
 
-function DialogTitle({ className, ...props }) {
+function DialogFooter({
+  className,
+  showCloseButton = false,
+  children,
+  ...props
+}) {
   return (
-    <RadixDialog.Title
-      className={cn('text-lg font-semibold leading-none tracking-tight', className)}
-      {...props}
-    />
+    <div
+      data-slot="dialog-footer"
+      className={cn("flex flex-col-reverse gap-2 sm:flex-row sm:justify-end", className)}
+      {...props}>
+      {children}
+      {showCloseButton && (
+        <DialogPrimitive.Close asChild>
+          <Button variant="outline">Close</Button>
+        </DialogPrimitive.Close>
+      )}
+    </div>
   );
 }
 
-function DialogDescription({ className, ...props }) {
+function DialogTitle({
+  className,
+  ...props
+}) {
   return (
-    <RadixDialog.Description
-      className={cn('text-sm text-muted-foreground', className)}
-      {...props}
-    />
+    <DialogPrimitive.Title
+      data-slot="dialog-title"
+      className={cn("font-heading text-sm font-medium", className)}
+      {...props} />
+  );
+}
+
+function DialogDescription({
+  className,
+  ...props
+}) {
+  return (
+    <DialogPrimitive.Description
+      data-slot="dialog-description"
+      className={cn(
+        "text-xs/relaxed text-muted-foreground *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-foreground",
+        className
+      )}
+      {...props} />
   );
 }
 
 export {
-  Dialog, DialogPortal, DialogOverlay, DialogClose, DialogTrigger,
-  DialogContent, DialogHeader, DialogFooter, DialogTitle, DialogDescription,
-};
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogOverlay,
+  DialogPortal,
+  DialogTitle,
+  DialogTrigger,
+}

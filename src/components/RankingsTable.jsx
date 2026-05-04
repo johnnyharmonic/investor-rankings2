@@ -7,9 +7,9 @@ import MetricTooltip from './MetricTooltip';
 const TABLE_METRICS = ['m1', 'm2', 'm3', 'm6', 'm8'];
 
 export default function RankingsTable() {
-  const [stage, setStage] = useState('All Stages');
-  const [sector, setSector] = useState('All Sectors');
-  const [geography, setGeography] = useState('All Geographies');
+  const [stage, setStage] = useState('All stages');
+  const [sector, setSector] = useState('All sectors');
+  const [geography, setGeography] = useState('All geographies');
   const [search, setSearch] = useState('');
   const [sortBy, setSortBy] = useState('rank');
   const [sortDir, setSortDir] = useState('asc');
@@ -55,9 +55,9 @@ export default function RankingsTable() {
         <Select label="Sector" value={sector} onChange={setSector} options={SECTORS} />
         <Select label="Geography" value={geography} onChange={setGeography} options={GEOGRAPHIES} />
 
-        {(stage !== 'All Stages' || sector !== 'All Sectors' || geography !== 'All Geographies' || search) && (
+        {(stage !== 'All stages' || sector !== 'All sectors' || geography !== 'All geographies' || search) && (
           <button
-            onClick={() => { setStage('All Stages'); setSector('All Sectors'); setGeography('All Geographies'); setSearch(''); }}
+            onClick={() => { setStage('All stages'); setSector('All sectors'); setGeography('All geographies'); setSearch(''); }}
             className="text-sm text-gray-500 hover:text-gray-800 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors whitespace-nowrap"
           >
             Clear filters

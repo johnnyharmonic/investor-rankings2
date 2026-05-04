@@ -1,6 +1,14 @@
 'use client';
 import { useState } from 'react';
 import { METRICS } from '@/data/investors';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Card, CardContent } from '@/components/ui/card';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { HugeiconsIcon } from '@hugeicons/react';
+import { Edit02Icon, Cancel01Icon, Tick02Icon } from '@hugeicons/core-free-icons';
 
 export default function CorrectionForm({ investorName, investorSlug }) {
   const [open, setOpen] = useState(false);
@@ -20,130 +28,118 @@ export default function CorrectionForm({ investorName, investorSlug }) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    // TODO: wire to backend / CRM
     console.log('Correction submitted:', { investorSlug, ...form });
     setSubmitted(true);
   }
 
   if (!open) {
     return (
-      <button
-        onClick={() => setOpen(true)}
-        className="text-sm text-gray-500 hover:text-gray-800 border border-gray-200 hover:border-gray-400 rounded-lg px-4 py-2 transition-colors flex items-center gap-2"
-      >
-        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-        </svg>
-        Dispute this data
-      </button>
+      <Button variant="outline" size="sm" onClick={() => setOpen(true)}>
+        <HugeiconsIcon icon={Edit02Icon} strokeWidth={2} />
+        Submit correction
+      </Button>
     );
   }
 
   return (
-    <div className="border border-gray-200 rounded-xl p-6 bg-gray-50">
-      <div className="flex items-start justify-between mb-4">
-        <div>
-          <h3 className="font-semibold text-gray-900">Suggest a Data Correction</h3>
-          <p className="text-sm text-gray-500 mt-0.5">We review all submissions. Corrections are reflected in the next data update.</p>
+    <Card className="bg-muted/30">
+      <CardContent>
+        <div className="flex items-start justify-between mb-4">
+          <div>
+            <h3 className="font-heading font-semibold text-sm text-foreground">Suggest a data correction</h3>
+            <p className="text-xs text-muted-foreground mt-0.5">
+              We review all submissions. Corrections are reflected in the next data update.
+            </p>
+          </div>
+          <Button variant="ghost" size="icon-sm" onClick={() => setOpen(false)} aria-label="Close">
+            <HugeiconsIcon icon={Cancel01Icon} strokeWidth={2} />
+          </Button>
         </div>
-        <button onClick={() => setOpen(false)} className="text-gray-400 hover:text-gray-600">
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-      </div>
 
-      {submitted ? (
-        <div className="text-center py-8">
-          <div className="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-3">
-            <svg className="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-            </svg>
+        {submitted ? (
+          <div className="text-center py-8">
+            <div className="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-3">
+              <HugeiconsIcon icon={Tick02Icon} strokeWidth={2} className="size-5 text-emerald-600" />
+            </div>
+            <h4 className="font-heading font-semibold text-sm text-foreground mb-1">Submission received</h4>
+            <p className="text-xs text-muted-foreground mb-4">
+              Our data team will review your feedback within 5 business days.
+            </p>
+            <Button asChild variant="link" size="sm">
+              <a href="https://harmonic.ai/contact" target="_blank" rel="noopener noreferrer">
+                Want to talk to us directly? Book a call
+              </a>
+            </Button>
           </div>
-          <h4 className="font-semibold text-gray-900 mb-1">Submission received</h4>
-          <p className="text-sm text-gray-500 mb-4">Our data team will review your feedback within 5 business days.</p>
-          <a
-            href="https://harmonic.ai/contact"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm text-harmonic-500 hover:underline"
-          >
-            Want to talk to us directly? Book a call →
-          </a>
-        </div>
-      ) : (
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <Field label="Your name" name="name" value={form.name} onChange={handleChange} placeholder="Jane Smith" required />
-            <Field label="Work email" name="email" type="email" value={form.email} onChange={handleChange} placeholder="jane@fund.vc" required />
-          </div>
-          <Field label="Fund name" name="fund" value={form.fund} onChange={handleChange} placeholder="Acme Ventures" required />
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Metric in question</label>
-            <select
-              name="metric"
-              value={form.metric}
-              onChange={handleChange}
-              required
-              className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-harmonic-500 bg-white"
-            >
-              <option value="">Select a metric</option>
-              {Object.values(METRICS).map(m => (
-                <option key={m.id} value={m.id}>{m.fullLabel}</option>
-              ))}
-              <option value="composite">Composite Score / Overall Ranking</option>
-              <option value="other">Other</option>
-            </select>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">What do you believe is incorrect?</label>
-            <textarea
-              name="issue"
-              value={form.issue}
-              onChange={handleChange}
-              required
-              rows={3}
-              placeholder="Describe the issue with the current data..."
-              className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-harmonic-500 resize-none"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Supporting evidence <span className="text-gray-400 font-normal">(optional)</span>
-            </label>
-            <textarea
-              name="evidence"
-              value={form.evidence}
-              onChange={handleChange}
-              rows={2}
-              placeholder="Links, documents, or data sources that support your correction..."
-              className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-harmonic-500 resize-none"
-            />
-          </div>
-          <button
-            type="submit"
-            className="w-full bg-harmonic-500 text-white py-2.5 rounded-lg font-medium text-sm hover:bg-harmonic-600 transition-colors"
-          >
-            Submit correction
-          </button>
-        </form>
-      )}
-    </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <Field label="Your name" name="name" value={form.name} onChange={handleChange} placeholder="Jane Smith" required />
+              <Field label="Work email" name="email" type="email" value={form.email} onChange={handleChange} placeholder="jane@fund.vc" required />
+            </div>
+            <Field label="Fund name" name="fund" value={form.fund} onChange={handleChange} placeholder="Acme Ventures" required />
+            <div className="space-y-1.5">
+              <Label htmlFor="metric">Metric in question</Label>
+              <Select value={form.metric} onValueChange={v => setForm(f => ({ ...f, metric: v }))} required>
+                <SelectTrigger id="metric" className="w-full">
+                  <SelectValue placeholder="Select a metric" />
+                </SelectTrigger>
+                <SelectContent>
+                  {Object.values(METRICS).map(m => (
+                    <SelectItem key={m.id} value={m.id}>{m.fullLabel}</SelectItem>
+                  ))}
+                  <SelectItem value="composite">Composite score / Overall ranking</SelectItem>
+                  <SelectItem value="other">Other</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="issue">What do you believe is incorrect?</Label>
+              <Textarea
+                id="issue"
+                name="issue"
+                value={form.issue}
+                onChange={handleChange}
+                required
+                rows={3}
+                placeholder="Describe the issue with the current data..."
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="evidence">
+                Supporting evidence <span className="text-muted-foreground font-normal">(optional)</span>
+              </Label>
+              <Textarea
+                id="evidence"
+                name="evidence"
+                value={form.evidence}
+                onChange={handleChange}
+                rows={2}
+                placeholder="Links, documents, or data sources that support your correction..."
+              />
+            </div>
+            <Button type="submit" className="w-full" size="lg">
+              Submit correction
+            </Button>
+          </form>
+        )}
+      </CardContent>
+    </Card>
   );
 }
 
 function Field({ label, name, value, onChange, placeholder, type = 'text', required }) {
   return (
-    <div>
-      <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
-      <input
+    <div className="space-y-1.5">
+      <Label htmlFor={name}>{label}</Label>
+      <Input
+        id={name}
         type={type}
         name={name}
         value={value}
         onChange={onChange}
         placeholder={placeholder}
         required={required}
-        className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-harmonic-500"
       />
     </div>
   );

@@ -2,20 +2,20 @@
 // Metrics: M1–M9 as defined in the PRD
 
 export const METRICS = {
-  m1: { id: 'm1', label: 'Follow-on Prob.', fullLabel: 'Follow-on Probability', unit: '%', description: 'Probability that a portfolio company raises at least one additional round after the investor\'s initial entry.' },
-  m2: { id: 'm2', label: 'Financing Velocity', fullLabel: 'Financing Velocity', unit: 'mo', description: 'Median months between the investor\'s entry round and the company\'s next financing round.' },
-  m3: { id: 'm3', label: 'Investor Follow-on', fullLabel: 'Investor Follow-on Rate', unit: '%', description: 'Probability that the investor participates in the company\'s next round following its initial investment.' },
-  m4: { id: 'm4', label: 'Deal Step-up', fullLabel: 'Deal Size Step-up Rate', unit: '%', description: 'Share of portfolio companies that experience an increase in deal size in the first round immediately following the investor\'s entry.' },
-  m5: { id: 'm5', label: 'Valuation Step-up', fullLabel: 'Valuation Step-up Rate', unit: '%', caveat: true, description: 'Share of portfolio companies with an increase in post-money valuation in the next round. Note: valuation estimates carry a higher error rate.' },
-  m6: { id: 'm6', label: 'Exit Probability', fullLabel: 'Exit Probability', unit: '%', description: 'Probability that a portfolio company eventually experiences an Exit-type deal (IPO or M&A).' },
-  m7: { id: 'm7', label: 'Time to Exit', fullLabel: 'Time to Exit', unit: 'mo', description: 'Median months between the investor\'s entry and the company\'s exit event (IPO or M&A).' },
-  m8: { id: 'm8', label: 'Unicorn Prob.', fullLabel: 'Unicorn Probability', unit: '%', description: 'Probability that a portfolio company reaches a valuation of $1B or above.' },
-  m9: { id: 'm9', label: 'Unicorn Exit Rate', fullLabel: 'Unicorn Exit Rate', unit: '%', description: 'Probability that a unicorn in which the investor has invested goes through an Exit-type deal.' },
+  m1: { id: 'm1', label: 'Follow-on prob.', fullLabel: 'Follow-on probability', unit: '%', description: 'Probability that a portfolio company raises at least one additional round after the investor\'s initial entry.' },
+  m2: { id: 'm2', label: 'Financing velocity', fullLabel: 'Financing velocity', unit: 'mo', description: 'Median months between the investor\'s entry round and the company\'s next financing round.' },
+  m3: { id: 'm3', label: 'Investor follow-on', fullLabel: 'Investor follow-on rate', unit: '%', description: 'Probability that the investor participates in the company\'s next round following its initial investment.' },
+  m4: { id: 'm4', label: 'Deal step-up', fullLabel: 'Deal size step-up rate', unit: '%', description: 'Share of portfolio companies that experience an increase in deal size in the first round immediately following the investor\'s entry.' },
+  m5: { id: 'm5', label: 'Valuation step-up', fullLabel: 'Valuation step-up rate', unit: '%', caveat: true, description: 'Share of portfolio companies with an increase in post-money valuation in the next round. Note: valuation estimates carry a higher error rate.' },
+  m6: { id: 'm6', label: 'Exit probability', fullLabel: 'Exit probability', unit: '%', description: 'Probability that a portfolio company eventually experiences an exit-type deal (IPO or M&A).' },
+  m7: { id: 'm7', label: 'Time to exit', fullLabel: 'Time to exit', unit: 'mo', description: 'Median months between the investor\'s entry and the company\'s exit event (IPO or M&A).' },
+  m8: { id: 'm8', label: 'Unicorn prob.', fullLabel: 'Unicorn probability', unit: '%', description: 'Probability that a portfolio company reaches a valuation of $1B or above.' },
+  m9: { id: 'm9', label: 'Unicorn exit rate', fullLabel: 'Unicorn exit rate', unit: '%', description: 'Probability that a unicorn in which the investor has invested goes through an exit-type deal.' },
 };
 
-export const STAGES = ['All Stages', 'Pre-Seed', 'Seed', 'Series A', 'Series B', 'Series C+', 'Multi-Stage'];
-export const SECTORS = ['All Sectors', 'Enterprise SaaS', 'Consumer', 'Fintech', 'Healthcare', 'Deep Tech', 'Infrastructure', 'Generalist'];
-export const GEOGRAPHIES = ['All Geographies', 'SF Bay Area', 'New York', 'Boston', 'Los Angeles', 'Austin', 'Global'];
+export const STAGES = ['All stages', 'Pre-Seed', 'Seed', 'Series A', 'Series B', 'Series C+', 'Multi-Stage'];
+export const SECTORS = ['All sectors', 'Enterprise SaaS', 'Consumer', 'Fintech', 'Healthcare', 'Deep Tech', 'Infrastructure', 'Generalist'];
+export const GEOGRAPHIES = ['All geographies', 'SF Bay Area', 'New York', 'Boston', 'Los Angeles', 'Austin', 'Global'];
 
 export const investors = [
   {
@@ -24,6 +24,7 @@ export const investors = [
     name: 'Sequoia Capital',
     fund: 'Sequoia Capital',
     logo: 'S',
+    domain: 'sequoiacap.com',
     stage: 'Multi-Stage',
     sector: 'Generalist',
     geography: 'SF Bay Area',
@@ -41,6 +42,7 @@ export const investors = [
     name: 'Andreessen Horowitz',
     fund: 'a16z',
     logo: 'a',
+    domain: 'a16z.com',
     stage: 'Multi-Stage',
     sector: 'Generalist',
     geography: 'SF Bay Area',
@@ -58,6 +60,7 @@ export const investors = [
     name: 'Accel',
     fund: 'Accel Partners',
     logo: 'A',
+    domain: 'accel.com',
     stage: 'Series A',
     sector: 'Enterprise SaaS',
     geography: 'SF Bay Area',
@@ -75,6 +78,7 @@ export const investors = [
     name: 'Benchmark',
     fund: 'Benchmark Capital',
     logo: 'B',
+    domain: 'benchmark.com',
     stage: 'Seed',
     sector: 'Generalist',
     geography: 'SF Bay Area',
@@ -92,6 +96,7 @@ export const investors = [
     name: 'Founders Fund',
     fund: 'Founders Fund',
     logo: 'F',
+    domain: 'foundersfund.com',
     stage: 'Multi-Stage',
     sector: 'Deep Tech',
     geography: 'SF Bay Area',
@@ -109,6 +114,7 @@ export const investors = [
     name: 'Kleiner Perkins',
     fund: 'Kleiner Perkins',
     logo: 'K',
+    domain: 'kleinerperkins.com',
     stage: 'Series A',
     sector: 'Enterprise SaaS',
     geography: 'SF Bay Area',
@@ -126,6 +132,7 @@ export const investors = [
     name: 'Greylock',
     fund: 'Greylock Partners',
     logo: 'G',
+    domain: 'greylock.com',
     stage: 'Series A',
     sector: 'Enterprise SaaS',
     geography: 'SF Bay Area',
@@ -143,6 +150,7 @@ export const investors = [
     name: 'Index Ventures',
     fund: 'Index Ventures',
     logo: 'I',
+    domain: 'indexventures.com',
     stage: 'Series A',
     sector: 'Generalist',
     geography: 'New York',
@@ -160,6 +168,7 @@ export const investors = [
     name: 'General Catalyst',
     fund: 'General Catalyst',
     logo: 'GC',
+    domain: 'generalcatalyst.com',
     stage: 'Multi-Stage',
     sector: 'Healthcare',
     geography: 'Boston',
@@ -177,6 +186,7 @@ export const investors = [
     name: 'Lightspeed',
     fund: 'Lightspeed Venture Partners',
     logo: 'L',
+    domain: 'lsvp.com',
     stage: 'Seed',
     sector: 'Enterprise SaaS',
     geography: 'SF Bay Area',
@@ -194,6 +204,7 @@ export const investors = [
     name: 'Union Square Ventures',
     fund: 'Union Square Ventures',
     logo: 'U',
+    domain: 'usv.com',
     stage: 'Seed',
     sector: 'Consumer',
     geography: 'New York',
@@ -211,6 +222,7 @@ export const investors = [
     name: 'Tiger Global',
     fund: 'Tiger Global Management',
     logo: 'T',
+    domain: 'tigerglobal.com',
     stage: 'Series B',
     sector: 'Generalist',
     geography: 'New York',
@@ -228,6 +240,7 @@ export const investors = [
     name: 'First Round Capital',
     fund: 'First Round Capital',
     logo: '1R',
+    domain: 'firstround.com',
     stage: 'Pre-Seed',
     sector: 'Generalist',
     geography: 'New York',
@@ -245,6 +258,7 @@ export const investors = [
     name: 'NEA',
     fund: 'New Enterprise Associates',
     logo: 'N',
+    domain: 'nea.com',
     stage: 'Multi-Stage',
     sector: 'Healthcare',
     geography: 'Boston',
@@ -262,6 +276,7 @@ export const investors = [
     name: 'Insight Partners',
     fund: 'Insight Partners',
     logo: 'IP',
+    domain: 'insightpartners.com',
     stage: 'Series B',
     sector: 'Enterprise SaaS',
     geography: 'New York',
@@ -279,6 +294,7 @@ export const investors = [
     name: 'Bessemer Venture Partners',
     fund: 'Bessemer Venture Partners',
     logo: 'BV',
+    domain: 'bvp.com',
     stage: 'Series A',
     sector: 'Enterprise SaaS',
     geography: 'SF Bay Area',
@@ -296,6 +312,7 @@ export const investors = [
     name: 'Coatue',
     fund: 'Coatue Management',
     logo: 'C',
+    domain: 'coatue.com',
     stage: 'Series B',
     sector: 'Consumer',
     geography: 'New York',
@@ -313,6 +330,7 @@ export const investors = [
     name: 'Y Combinator',
     fund: 'Y Combinator',
     logo: 'YC',
+    domain: 'ycombinator.com',
     stage: 'Pre-Seed',
     sector: 'Generalist',
     geography: 'SF Bay Area',
@@ -330,6 +348,7 @@ export const investors = [
     name: 'Spark Capital',
     fund: 'Spark Capital',
     logo: 'SC',
+    domain: 'sparkcapital.com',
     stage: 'Seed',
     sector: 'Consumer',
     geography: 'Boston',
@@ -347,6 +366,7 @@ export const investors = [
     name: 'Battery Ventures',
     fund: 'Battery Ventures',
     logo: 'BT',
+    domain: 'battery.com',
     stage: 'Series A',
     sector: 'Infrastructure',
     geography: 'Boston',
@@ -364,6 +384,7 @@ export const investors = [
     name: 'Redpoint Ventures',
     fund: 'Redpoint Ventures',
     logo: 'R',
+    domain: 'redpoint.com',
     stage: 'Seed',
     sector: 'Infrastructure',
     geography: 'SF Bay Area',
@@ -381,6 +402,7 @@ export const investors = [
     name: 'Ribbit Capital',
     fund: 'Ribbit Capital',
     logo: 'RC',
+    domain: 'ribbitcap.com',
     stage: 'Series A',
     sector: 'Fintech',
     geography: 'SF Bay Area',
@@ -398,6 +420,7 @@ export const investors = [
     name: 'Social Capital',
     fund: 'Social Capital',
     logo: 'SoC',
+    domain: 'socialcapital.com',
     stage: 'Seed',
     sector: 'Healthcare',
     geography: 'SF Bay Area',
@@ -415,6 +438,7 @@ export const investors = [
     name: 'Khosla Ventures',
     fund: 'Khosla Ventures',
     logo: 'KV',
+    domain: 'khoslaventures.com',
     stage: 'Seed',
     sector: 'Deep Tech',
     geography: 'SF Bay Area',
@@ -432,6 +456,7 @@ export const investors = [
     name: 'GV',
     fund: 'GV (Google Ventures)',
     logo: 'GV',
+    domain: 'gv.com',
     stage: 'Series A',
     sector: 'Healthcare',
     geography: 'SF Bay Area',
@@ -449,16 +474,50 @@ export function getInvestorBySlug(slug) {
   return investors.find(i => i.slug === slug) || null;
 }
 
+export function getMetricBreakdown(investor, metricId) {
+  const aumNum = parseInt(String(investor.aum).replace(/[^0-9]/g, ''), 10) || 1;
+  const portcos = aumNum * 5 + 50;
+  const value = investor.metrics[metricId];
+
+  switch (metricId) {
+    case 'm1':
+    case 'm6':
+    case 'm8': {
+      const num = Math.round((value / 100) * portcos);
+      return { text: `${num} / ${portcos} portcos` };
+    }
+    case 'm3':
+    case 'm4':
+    case 'm5': {
+      const num = Math.round((value / 100) * portcos);
+      return { text: `${num} / ${portcos} rounds` };
+    }
+    case 'm9': {
+      const unicorns = Math.max(1, Math.round((investor.metrics.m8 / 100) * portcos));
+      const num = Math.round((value / 100) * unicorns);
+      return { text: `${num} / ${unicorns} unicorns` };
+    }
+    case 'm2':
+      return { text: `Across ${portcos} rounds` };
+    case 'm7': {
+      const exits = Math.max(1, Math.round((investor.metrics.m6 / 100) * portcos));
+      return { text: `Across ${exits} exits` };
+    }
+    default:
+      return null;
+  }
+}
+
 export function getFilteredInvestors({ stage, sector, geography, search, sortBy, sortDir }) {
   let result = [...investors];
 
-  if (stage && stage !== 'All Stages') {
+  if (stage && stage !== 'All stages') {
     result = result.filter(i => i.stage === stage || i.stage === 'Multi-Stage');
   }
-  if (sector && sector !== 'All Sectors') {
+  if (sector && sector !== 'All sectors') {
     result = result.filter(i => i.sector === sector || i.sector === 'Generalist');
   }
-  if (geography && geography !== 'All Geographies') {
+  if (geography && geography !== 'All geographies') {
     result = result.filter(i => i.geography === geography);
   }
   if (search) {

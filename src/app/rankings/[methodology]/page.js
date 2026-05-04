@@ -2,6 +2,10 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { METRICS } from '@/data/investors';
 import MethodologyRankingsList from '@/components/MethodologyRankingsList';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent } from '@/components/ui/card';
+import { HugeiconsIcon } from '@hugeicons/react';
+import { ArrowRight01Icon } from '@hugeicons/core-free-icons';
 
 const LOWER_IS_BETTER = new Set(['m2', 'm7']);
 
@@ -13,83 +17,88 @@ export async function generateMetadata({ params }) {
   const metric = METRICS[params.methodology];
   if (!metric) return {};
   return {
-    title: `Ranked by ${metric.fullLabel} — Investor Rankings`,
+    title: `Ranked by ${metric.fullLabel} — Investor rankings`,
     description: `Investors ranked by ${metric.fullLabel}. ${metric.description}`,
   };
 }
 
-export default function MethodologyRankingsPage({ params }) {
+export default function MethodologyRankingsPage({ params, searchParams }) {
   const metric = METRICS[params.methodology];
   if (!metric) notFound();
 
   const lowerIsBetter = LOWER_IS_BETTER.has(metric.id);
 
+  const filterParams = new URLSearchParams();
+  if (searchParams?.stage && searchParams.stage !== 'All stages') filterParams.set('stage', searchParams.stage);
+  if (searchParams?.sector && searchParams.sector !== 'All sectors') filterParams.set('sector', searchParams.sector);
+  if (searchParams?.geography && searchParams.geography !== 'All geographies') filterParams.set('geography', searchParams.geography);
+  const filterQs = filterParams.toString();
+
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      {/* Breadcrumb */}
-      <nav className="text-sm text-gray-400 mb-6 flex items-center gap-2">
-        <Link href="/" className="hover:text-gray-700 transition-colors">Methodologies</Link>
+      <nav className="text-xs text-muted-foreground mb-6 flex items-center gap-2">
+        <Link href="/" className="hover:text-foreground transition-colors">Methodologies</Link>
         <span>/</span>
-        <span className="text-gray-700">{metric.fullLabel}</span>
+        <span className="text-foreground">{metric.fullLabel}</span>
       </nav>
 
-      {/* Header */}
-      <div className="mb-8">
-        <div className="flex items-center gap-2 mb-3">
-          <span className="text-xs font-mono bg-gray-100 text-gray-500 px-2 py-0.5 rounded uppercase">
-            {metric.id}
-          </span>
+      <header className="mb-8">
+        <div className="flex items-center gap-2 mb-3 flex-wrap">
+          <Badge variant="outline" className="font-mono uppercase">{metric.id}</Badge>
           {metric.caveat && (
-            <span className="text-xs text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded">
-              ⚠ Higher uncertainty
-            </span>
+            <Badge variant="destructive">⚠ Higher uncertainty</Badge>
           )}
-          <span className="text-xs text-gray-400">
+          <span className="text-[0.625rem] text-muted-foreground">
             {lowerIsBetter ? 'Lower is better' : 'Higher is better'}
           </span>
         </div>
-        <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3 tracking-tight">
+        <h1 className="font-heading text-3xl sm:text-4xl font-bold text-foreground tracking-tight mb-3">
           Ranked by {metric.fullLabel}
         </h1>
-        <p className="text-gray-500 text-lg leading-relaxed max-w-3xl">
+        <p className="text-sm/relaxed sm:text-base/relaxed text-muted-foreground max-w-3xl">
           {metric.description}
         </p>
-      </div>
+      </header>
 
       <MethodologyRankingsList metric={metric} />
 
-      {/* Other methodologies */}
-      <div className="mt-12">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Explore other methodologies</h2>
+      <section className="mt-12">
+        <h2 className="font-heading text-base font-semibold text-foreground mb-4">
+          Explore other methodologies
+        </h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
           {Object.values(METRICS)
             .filter(m => m.id !== metric.id)
             .map(m => (
-              <Link
-                key={m.id}
-                href={`/rankings/${m.id}`}
-                className="bg-white border border-gray-200 rounded-xl p-3 hover:border-harmonic-500 transition-colors"
-              >
-                <p className="text-xs font-mono text-gray-400 uppercase mb-1">{m.id}</p>
-                <p className="text-sm font-medium text-gray-900 leading-tight">{m.fullLabel}</p>
+              <Link key={m.id} href={filterQs ? `/rankings/${m.id}?${filterQs}` : `/rankings/${m.id}`} className="group">
+                <Card className="transition-colors hover:ring-foreground/20">
+                  <CardContent>
+                    <p className="text-[0.625rem] font-mono uppercase text-muted-foreground mb-1">
+                      {m.id}
+                    </p>
+                    <p className="text-xs/relaxed font-medium text-foreground leading-tight">
+                      {m.fullLabel}
+                    </p>
+                  </CardContent>
+                </Card>
               </Link>
             ))}
         </div>
-      </div>
+      </section>
 
-      {/* Methodology link */}
-      <div className="mt-10 bg-gray-50 border border-gray-200 rounded-xl p-4 text-sm text-gray-500">
-        <p>
-          <span className="font-medium text-gray-700">Methodology note:</span>{' '}
+      <Card className="mt-10 bg-muted/30">
+        <CardContent className="text-xs/relaxed text-muted-foreground">
+          <span className="font-medium text-foreground">Methodology note:</span>{' '}
           {lowerIsBetter
             ? `For ${metric.fullLabel}, lower values are better — investors whose portfolio companies move faster rank higher.`
             : `For ${metric.fullLabel}, higher values are better.`}{' '}
           Data as of May 2026.{' '}
-          <Link href="/methodology" className="text-harmonic-500 hover:underline">
-            Read the full methodology →
+          <Link href="/methodology" className="text-foreground hover:underline inline-flex items-center gap-0.5">
+            Read the full methodology
+            <HugeiconsIcon icon={ArrowRight01Icon} strokeWidth={2} className="size-3" />
           </Link>
-        </p>
-      </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }
