@@ -29,19 +29,13 @@ export default function MethodologyRankingsPage({ params, searchParams }) {
   const lowerIsBetter = LOWER_IS_BETTER.has(metric.id);
 
   const filterParams = new URLSearchParams();
-  if (searchParams?.stage && searchParams.stage !== 'All stages') filterParams.set('stage', searchParams.stage);
-  if (searchParams?.sector && searchParams.sector !== 'All sectors') filterParams.set('sector', searchParams.sector);
-  if (searchParams?.geography && searchParams.geography !== 'All geographies') filterParams.set('geography', searchParams.geography);
+  if (searchParams?.stage) filterParams.set('stage', searchParams.stage);
+  if (searchParams?.sector) filterParams.set('sector', searchParams.sector);
+  if (searchParams?.geography) filterParams.set('geography', searchParams.geography);
   const filterQs = filterParams.toString();
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      <nav className="text-xs text-muted-foreground mb-6 flex items-center gap-2">
-        <Link href="/" className="hover:text-foreground transition-colors">Methodologies</Link>
-        <span>/</span>
-        <span className="text-foreground">{metric.fullLabel}</span>
-      </nav>
-
       <header className="mb-8">
         <div className="flex items-center gap-2 mb-3 flex-wrap">
           <Badge variant="outline" className="font-mono uppercase">{metric.id}</Badge>

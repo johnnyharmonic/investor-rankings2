@@ -5,16 +5,16 @@ import { useSearchParams } from 'next/navigation';
 import { getFilteredInvestors } from '@/data/investors';
 import { Card } from '@/components/ui/card';
 import InvestorLogo from '@/components/InvestorLogo';
-import MethodologyFilters from '@/components/MethodologyFilters';
+import MethodologyFilters, { parseFilterValues } from '@/components/MethodologyFilters';
 
 const LOWER_IS_BETTER = new Set(['m2', 'm7']);
 const TABLE_LIMIT = 25;
 
 export default function MethodologyRankingsList({ metric }) {
   const searchParams = useSearchParams();
-  const stage = searchParams.get('stage') || 'All stages';
-  const sector = searchParams.get('sector') || 'All sectors';
-  const geography = searchParams.get('geography') || 'All geographies';
+  const stages = parseFilterValues(searchParams.get('stage'));
+  const sectors = parseFilterValues(searchParams.get('sector'));
+  const geographies = parseFilterValues(searchParams.get('geography'));
 
   const lowerIsBetter = LOWER_IS_BETTER.has(metric.id);
 
@@ -22,13 +22,13 @@ export default function MethodologyRankingsList({ metric }) {
   // matches. Here, we show top filtered matches first, then pad with the next-best non-matches
   // so the table always renders TABLE_LIMIT rows.
   const sorted = useMemo(() => {
-    const filtered = getFilteredInvestors({ stage, sector, geography, sortBy: metric.id, sortDir: 'desc' });
+    const filtered = getFilteredInvestors({ stage: stages, sector: sectors, geography: geographies, sortBy: metric.id, sortDir: 'desc' });
     if (filtered.length >= TABLE_LIMIT) return filtered.slice(0, TABLE_LIMIT);
     const all = getFilteredInvestors({ sortBy: metric.id, sortDir: 'desc' });
     const seen = new Set(filtered.map(i => i.id));
     const padding = all.filter(i => !seen.has(i.id));
     return [...filtered, ...padding].slice(0, TABLE_LIMIT);
-  }, [stage, sector, geography, metric.id]);
+  }, [stages.join(','), sectors.join(','), geographies.join(','), metric.id]);
 
   const { best, worst } = useMemo(() => {
     if (sorted.length === 0) return { best: null, worst: null };

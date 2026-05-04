@@ -37,12 +37,6 @@ export default function InvestorPage({ params }) {
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-      <nav className="text-xs text-muted-foreground mb-6 flex items-center gap-2">
-        <Link href="/" className="hover:text-foreground transition-colors">Rankings</Link>
-        <span>/</span>
-        <span className="text-foreground">{inv.name}</span>
-      </nav>
-
       {/* Hero card */}
       <Card className="mb-6">
         <CardContent className="flex items-start gap-4 min-w-0">

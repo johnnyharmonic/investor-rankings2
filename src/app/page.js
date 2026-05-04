@@ -3,7 +3,7 @@ import { METRICS, getFilteredInvestors } from '@/data/investors';
 import InvestorSearch from '@/components/InvestorSearch';
 import InvestorLogo from '@/components/InvestorLogo';
 import BrandChip from '@/components/BrandChip';
-import MethodologyFilters from '@/components/MethodologyFilters';
+import MethodologyFilters, { parseFilterValues } from '@/components/MethodologyFilters';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
@@ -28,14 +28,14 @@ const METRIC_DOTS = {
 };
 
 export default function HomePage({ searchParams }) {
-  const stage = searchParams?.stage || 'All stages';
-  const sector = searchParams?.sector || 'All sectors';
-  const geography = searchParams?.geography || 'All geographies';
+  const stages = parseFilterValues(searchParams?.stage);
+  const sectors = parseFilterValues(searchParams?.sector);
+  const geographies = parseFilterValues(searchParams?.geography);
 
   const filterParams = new URLSearchParams();
-  if (stage !== 'All stages') filterParams.set('stage', stage);
-  if (sector !== 'All sectors') filterParams.set('sector', sector);
-  if (geography !== 'All geographies') filterParams.set('geography', geography);
+  if (stages.length) filterParams.set('stage', stages.join(','));
+  if (sectors.length) filterParams.set('sector', sectors.join(','));
+  if (geographies.length) filterParams.set('geography', geographies.join(','));
   const filterQs = filterParams.toString();
 
   return (
@@ -92,7 +92,7 @@ export default function HomePage({ searchParams }) {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {Object.values(METRICS).map(m => {
-            const filtered = getFilteredInvestors({ stage, sector, geography, sortBy: m.id, sortDir: 'desc' });
+            const filtered = getFilteredInvestors({ stage: stages, sector: sectors, geography: geographies, sortBy: m.id, sortDir: 'desc' });
             const top3 = filtered.slice(0, 3);
             const formatValue = v => m.unit === '%' ? `${v}%` : `${v} mo`;
             const href = filterQs ? `/rankings/${m.id}?${filterQs}` : `/rankings/${m.id}`;

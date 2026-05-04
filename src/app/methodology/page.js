@@ -15,12 +15,6 @@ export const metadata = {
 export default function MethodologyPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <nav className="text-xs text-muted-foreground mb-6 flex items-center gap-2">
-        <Link href="/" className="hover:text-foreground transition-colors">Rankings</Link>
-        <span>/</span>
-        <span className="text-foreground">Methodology</span>
-      </nav>
-
       <header className="mb-10">
         <h1 className="font-heading text-3xl sm:text-4xl font-bold text-foreground tracking-tight mb-3">
           How we rank investors

@@ -474,6 +474,12 @@ export function getInvestorBySlug(slug) {
   return investors.find(i => i.slug === slug) || null;
 }
 
+function normalizeFilter(value, sentinel) {
+  if (Array.isArray(value)) return value.filter(v => v && v !== sentinel);
+  if (typeof value === 'string' && value && value !== sentinel) return [value];
+  return [];
+}
+
 export function getMetricBreakdown(investor, metricId) {
   const aumNum = parseInt(String(investor.aum).replace(/[^0-9]/g, ''), 10) || 1;
   const portcos = aumNum * 5 + 50;
@@ -511,14 +517,18 @@ export function getMetricBreakdown(investor, metricId) {
 export function getFilteredInvestors({ stage, sector, geography, search, sortBy, sortDir }) {
   let result = [...investors];
 
-  if (stage && stage !== 'All stages') {
-    result = result.filter(i => i.stage === stage || i.stage === 'Multi-Stage');
+  const stages = normalizeFilter(stage, 'All stages');
+  const sectors = normalizeFilter(sector, 'All sectors');
+  const geos = normalizeFilter(geography, 'All geographies');
+
+  if (stages.length) {
+    result = result.filter(i => stages.includes(i.stage) || i.stage === 'Multi-Stage');
   }
-  if (sector && sector !== 'All sectors') {
-    result = result.filter(i => i.sector === sector || i.sector === 'Generalist');
+  if (sectors.length) {
+    result = result.filter(i => sectors.includes(i.sector) || i.sector === 'Generalist');
   }
-  if (geography && geography !== 'All geographies') {
-    result = result.filter(i => i.geography === geography);
+  if (geos.length) {
+    result = result.filter(i => geos.includes(i.geography));
   }
   if (search) {
     const q = search.toLowerCase();

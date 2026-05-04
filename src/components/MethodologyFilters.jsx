@@ -2,37 +2,37 @@
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { STAGES, SECTORS, GEOGRAPHIES } from '@/data/investors';
 import { Button } from '@/components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import MultiSelect from '@/components/MultiSelect';
 
-const DEFAULTS = {
-  stage: 'All stages',
-  sector: 'All sectors',
-  geography: 'All geographies',
-};
+export function parseFilterValues(raw) {
+  if (!raw) return [];
+  return String(raw).split(',').map(s => s.trim()).filter(Boolean);
+}
 
 export default function MethodologyFilters() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const stage = searchParams.get('stage') || DEFAULTS.stage;
-  const sector = searchParams.get('sector') || DEFAULTS.sector;
-  const geography = searchParams.get('geography') || DEFAULTS.geography;
+  const stages = parseFilterValues(searchParams.get('stage'));
+  const sectors = parseFilterValues(searchParams.get('sector'));
+  const geographies = parseFilterValues(searchParams.get('geography'));
 
-  const hasFilters =
-    stage !== DEFAULTS.stage || sector !== DEFAULTS.sector || geography !== DEFAULTS.geography;
+  const hasFilters = stages.length || sectors.length || geographies.length;
 
-  function update(key, value) {
+  function update(key, values) {
     const params = new URLSearchParams(searchParams.toString());
-    if (value === DEFAULTS[key]) params.delete(key);
-    else params.set(key, value);
+    if (values.length === 0) params.delete(key);
+    else params.set(key, values.join(','));
     const qs = params.toString();
     router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
   }
 
   function clear() {
     const params = new URLSearchParams(searchParams.toString());
-    Object.keys(DEFAULTS).forEach(k => params.delete(k));
+    params.delete('stage');
+    params.delete('sector');
+    params.delete('geography');
     const qs = params.toString();
     router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
   }
@@ -42,29 +42,29 @@ export default function MethodologyFilters() {
       <span className="text-[0.625rem] font-medium text-muted-foreground uppercase tracking-wider self-center sm:mr-1">
         Filter
       </span>
-      <FilterSelect value={stage} onChange={v => update('stage', v)} options={STAGES} placeholder="Stage" />
-      <FilterSelect value={sector} onChange={v => update('sector', v)} options={SECTORS} placeholder="Industry" />
-      <FilterSelect value={geography} onChange={v => update('geography', v)} options={GEOGRAPHIES} placeholder="Location" />
+      <MultiSelect
+        values={stages}
+        onChange={v => update('stage', v)}
+        options={STAGES}
+        placeholder="Stage"
+      />
+      <MultiSelect
+        values={sectors}
+        onChange={v => update('sector', v)}
+        options={SECTORS}
+        placeholder="Industry"
+      />
+      <MultiSelect
+        values={geographies}
+        onChange={v => update('geography', v)}
+        options={GEOGRAPHIES}
+        placeholder="Location"
+      />
       {hasFilters && (
         <Button variant="ghost" size="sm" onClick={clear} className="sm:ml-auto">
           Clear
         </Button>
       )}
     </div>
-  );
-}
-
-function FilterSelect({ value, onChange, options, placeholder }) {
-  return (
-    <Select value={value} onValueChange={onChange}>
-      <SelectTrigger className="min-w-[140px]" aria-label={placeholder}>
-        <SelectValue placeholder={placeholder} />
-      </SelectTrigger>
-      <SelectContent>
-        {options.map(o => (
-          <SelectItem key={o} value={o}>{o}</SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
   );
 }
