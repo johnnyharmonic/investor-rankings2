@@ -42,19 +42,19 @@ export default function MethodologyFilters({ endSlot }) {
         values={stages}
         onChange={v => update('stage', v)}
         options={STAGES}
-        placeholder="Stage"
+        placeholder="Stage focus"
       />
       <MultiSelect
         values={sectors}
         onChange={v => update('sector', v)}
         options={SECTORS}
-        placeholder="Industry"
+        placeholder="Sector focus"
       />
       <MultiSelect
         values={geographies}
         onChange={v => update('geography', v)}
         options={GEOGRAPHIES}
-        placeholder="Location"
+        placeholder="Country focus"
       />
       {hasFilters && (
         <Button variant="ghost" size="sm" onClick={clear}>

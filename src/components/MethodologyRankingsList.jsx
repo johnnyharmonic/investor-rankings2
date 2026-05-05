@@ -9,7 +9,6 @@ import MethodologyFilters from '@/components/MethodologyFilters';
 import ShareButton from '@/components/ShareButton';
 import { parseFilterValues } from '@/lib/filters';
 
-const LOWER_IS_BETTER = new Set(['m2', 'm7']);
 const TABLE_LIMIT = 25;
 
 export default function MethodologyRankingsList({ metric }) {
@@ -17,8 +16,6 @@ export default function MethodologyRankingsList({ metric }) {
   const stages = parseFilterValues(searchParams.get('stage'));
   const sectors = parseFilterValues(searchParams.get('sector'));
   const geographies = parseFilterValues(searchParams.get('geography'));
-
-  const lowerIsBetter = LOWER_IS_BETTER.has(metric.id);
 
   const filterQs = (() => {
     const params = new URLSearchParams();
@@ -40,21 +37,6 @@ export default function MethodologyRankingsList({ metric }) {
     return [...filtered, ...padding].slice(0, TABLE_LIMIT);
   }, [stages.join(','), sectors.join(','), geographies.join(','), metric.id]);
 
-  const { best, worst } = useMemo(() => {
-    if (sorted.length === 0) return { best: null, worst: null };
-    const values = sorted.map(i => i.metrics[metric.id]);
-    return {
-      best: lowerIsBetter ? Math.min(...values) : Math.max(...values),
-      worst: lowerIsBetter ? Math.max(...values) : Math.min(...values),
-    };
-  }, [sorted, metric.id, lowerIsBetter]);
-
-  function pctOfBest(v) {
-    if (best === null || best === worst) return 100;
-    if (lowerIsBetter) return 10 + ((worst - v) / (worst - best)) * 90;
-    return 10 + ((v - worst) / (best - worst)) * 90;
-  }
-
   function formatValue(v) {
     return metric.unit === '%' ? `${v}%` : `${v} mo`;
   }
@@ -68,9 +50,9 @@ export default function MethodologyRankingsList({ metric }) {
         <div className="px-4 py-2.5 bg-muted/50 border-b border-border flex items-center gap-4 text-[0.625rem] font-medium text-muted-foreground uppercase tracking-wider">
           <div className="w-10">Rank</div>
           <div className="flex-1 min-w-0">Investor</div>
-          <div className="hidden md:block w-32 min-w-0">Stage</div>
-          <div className="hidden md:block w-32 min-w-0">Industry</div>
-          <div className="hidden md:block w-32 min-w-0">Location</div>
+          <div className="hidden md:block w-32 min-w-0">Stage focus</div>
+          <div className="hidden md:block w-32 min-w-0">Sector focus</div>
+          <div className="hidden md:block w-32 min-w-0">Country focus</div>
           <div className="w-32 min-w-0 text-right">{metric.label}</div>
         </div>
         {sorted.length === 0 ? (
@@ -82,7 +64,6 @@ export default function MethodologyRankingsList({ metric }) {
           <ul className="divide-y divide-border">
             {sorted.map((inv, idx) => {
               const value = inv.metrics[metric.id];
-              const width = pctOfBest(value);
               const isTop = idx < 3;
               return (
                 <li key={inv.id}>
@@ -112,15 +93,8 @@ export default function MethodologyRankingsList({ metric }) {
                     <div className="hidden md:block w-32 min-w-0 text-xs text-muted-foreground truncate">{inv.sector}</div>
                     <div className="hidden md:block w-32 min-w-0 text-xs text-muted-foreground truncate">{inv.geography}</div>
                     <div className="w-32 min-w-0 flex items-center gap-3 justify-end">
-                      {metric.unit === '%' ? (
+                      {metric.unit === '%' && (
                         <PercentRing value={value} isTop={isTop} className="hidden sm:block flex-shrink-0" />
-                      ) : (
-                        <div className="hidden sm:block flex-1 h-1 bg-muted rounded-full overflow-hidden">
-                          <div
-                            className={`h-full rounded-full ${isTop ? 'bg-emerald-500' : 'bg-foreground/30'}`}
-                            style={{ width: `${width}%` }}
-                          />
-                        </div>
                       )}
                       <span className="text-sm font-semibold text-foreground tabular-nums whitespace-nowrap">
                         {formatValue(value)}

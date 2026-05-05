@@ -86,6 +86,61 @@ export default function MethodologyPage() {
         </Card>
       </Section>
 
+      <Section title="How the platform works">
+        <p>
+          The platform starts from precomputed investor-level measure files.
+          The underlying dataset includes only investors with at least 25 investments
+          — a baseline data inclusion rule applied before any user-selected filters.
+        </p>
+
+        <h3 className="font-semibold text-sm text-foreground mt-5 mb-2">User filters</h3>
+        <p>
+          Users restrict the ranking universe through sidebar filters:
+        </p>
+        <ul className="mt-3 space-y-1.5 list-disc pl-5">
+          <li>Deal type</li>
+          <li>Company scope</li>
+          <li>Investor HQ geography</li>
+          <li>Investor primary type</li>
+          <li>Investor geography focus</li>
+          <li>Investor vertical focus</li>
+        </ul>
+
+        <h3 className="font-semibold text-sm text-foreground mt-5 mb-2">Company scope</h3>
+        <p>Company scope can be defined in two ways:</p>
+        <ul className="mt-2 space-y-2 list-disc pl-5">
+          <li>
+            <Code>Location filter</Code> — rankings are based on the selected company geography.
+          </li>
+          <li>
+            <Code>Vertical filter</Code> — rankings are based on a specific vertical row or on the precomputed <Code>All verticals</Code> row.
+          </li>
+        </ul>
+        <p className="mt-3">
+          In Vertical filter mode, <Code>All verticals</Code> does not combine verticals on
+          the fly. It refers to a precomputed all-deals aggregate row, while each individual
+          vertical uses its own dedicated precomputed row.
+        </p>
+
+        <h3 className="font-semibold text-sm text-foreground mt-5 mb-2">Minimum activity restrictions</h3>
+        <p>
+          After the base filters are applied, the platform enforces minimum activity
+          restrictions for the selected horizon and deal type. These require a minimum
+          number of deals and a minimum number of unique portfolio companies.
+        </p>
+
+        <h3 className="font-semibold text-sm text-foreground mt-5 mb-2">Measure-specific qualification</h3>
+        <p>
+          Rankings are measure-specific. To appear in a given Top-N ranking, an investor must
+          also satisfy the qualification threshold for that specific measure. These thresholds
+          depend on the relevant denominator for the measure — eligible companies, eligible
+          deals, exit companies, or unicorn denominator companies.
+        </p>
+        <p className="mt-3 text-xs italic">
+          Qualification thresholds are fixed at the default values in this simplified version.
+        </p>
+      </Section>
+
       <Section title="The 9 metrics">
         <div className="space-y-3">
           {Object.values(METRICS).map(m => (
@@ -215,5 +270,13 @@ function FAQ({ q, children }) {
       <p className="text-sm font-semibold text-foreground mb-1">{q}</p>
       <p className="text-xs/relaxed text-muted-foreground">{children}</p>
     </div>
+  );
+}
+
+function Code({ children }) {
+  return (
+    <code className="font-mono text-[0.75rem] bg-muted text-foreground px-1.5 py-0.5 rounded">
+      {children}
+    </code>
   );
 }
