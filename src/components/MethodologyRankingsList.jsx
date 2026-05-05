@@ -6,6 +6,7 @@ import { getFilteredInvestors } from '@/data/investors';
 import { Card } from '@/components/ui/card';
 import InvestorLogo from '@/components/InvestorLogo';
 import MethodologyFilters from '@/components/MethodologyFilters';
+import ShareButton from '@/components/ShareButton';
 import { parseFilterValues } from '@/lib/filters';
 
 const LOWER_IS_BETTER = new Set(['m2', 'm7']);
@@ -60,7 +61,7 @@ export default function MethodologyRankingsList({ metric }) {
 
   return (
     <>
-      <MethodologyFilters />
+      <MethodologyFilters endSlot={<ShareButton />} />
 
       {/* Ranked list */}
       <Card className="p-0 gap-0">

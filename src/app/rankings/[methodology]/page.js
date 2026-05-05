@@ -19,6 +19,11 @@ export async function generateMetadata({ params }) {
   return {
     title: `Ranked by ${metric.fullLabel} — Investor rankings`,
     description: `Investors ranked by ${metric.fullLabel}. ${metric.description}`,
+    twitter: {
+      card: 'summary_large_image',
+      title: `Ranked by ${metric.fullLabel}`,
+      description: metric.description,
+    },
   };
 }
 

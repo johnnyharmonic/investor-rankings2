@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import MultiSelect from '@/components/MultiSelect';
 import { parseFilterValues } from '@/lib/filters';
 
-export default function MethodologyFilters() {
+export default function MethodologyFilters({ endSlot }) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -61,6 +61,7 @@ export default function MethodologyFilters() {
           Clear
         </Button>
       )}
+      {endSlot && <div className="sm:ml-auto">{endSlot}</div>}
     </div>
   );
 }
