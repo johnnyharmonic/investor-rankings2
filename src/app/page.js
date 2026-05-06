@@ -3,29 +3,19 @@ import { METRICS, getFilteredInvestors } from '@/data/investors';
 import InvestorSearch from '@/components/InvestorSearch';
 import InvestorLogo from '@/components/InvestorLogo';
 import BrandChip from '@/components/BrandChip';
+import HeroDotGrid from '@/components/HeroDotGrid';
 import MethodologyFilters from '@/components/MethodologyFilters';
 import { parseFilterValues } from '@/lib/filters';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
+import { RANK_GRADIENT, RANK_NUM_COLOR } from '@/lib/rankStyles';
 import { HugeiconsIcon } from '@hugeicons/react';
-import { ArrowRight01Icon, Alert02Icon } from '@hugeicons/core-free-icons';
+import { ArrowRight01Icon } from '@hugeicons/core-free-icons';
 
 export const metadata = {
   title: 'Investor rankings — Harmonic × UChicago',
-  description: 'Discover which VCs are most likely to help your company raise follow-on, grow faster, and reach an exit. Objective data-driven rankings for founders.',
-};
-
-const METRIC_DOTS = {
-  m1: 'bg-emerald-500',
-  m2: 'bg-blue-500',
-  m3: 'bg-violet-500',
-  m4: 'bg-amber-500',
-  m5: 'bg-rose-500',
-  m6: 'bg-teal-500',
-  m7: 'bg-sky-500',
-  m8: 'bg-fuchsia-500',
-  m9: 'bg-orange-500',
+  description:
+    'Discover which VCs are most likely to help your company raise follow-on, grow faster, and reach an exit. Objective data-driven rankings for founders.',
 };
 
 export default function HomePage({ searchParams }) {
@@ -40,150 +30,163 @@ export default function HomePage({ searchParams }) {
   const filterQs = filterParams.toString();
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div>
       {/* Hero */}
-      <section className="mb-14 max-w-3xl">
-        <div className="flex items-center gap-3 mb-5 flex-wrap">
-          <Badge variant="outline" className="gap-1.5 pl-2">
+      <section className="hero-bg px-4 sm:px-6 pt-16 pb-20 sm:pt-24 sm:pb-28">
+        <HeroDotGrid />
+        <div className="max-w-2xl mx-auto flex flex-col items-center text-center">
+          <div className="inline-flex items-center gap-2.5 rounded-full ring-1 ring-foreground/10 bg-card/40 px-2.5 py-1 mb-7">
             <span className="relative flex size-1.5">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-75" />
-              <span className="relative inline-flex size-1.5 rounded-full bg-emerald-500" />
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-400 opacity-75" />
+              <span className="relative inline-flex size-1.5 rounded-full bg-sky-400" />
             </span>
-            Real time data
-          </Badge>
-          <span className="text-[0.625rem] text-muted-foreground">Last updated May 4, 2026</span>
-        </div>
-        <h1 className="font-heading text-4xl sm:text-5xl font-bold leading-[1.1] mb-4 tracking-tight">
-          <span className="block text-foreground">Investor rankings</span>
-          <span className="block text-muted-foreground/60">Objective, data-driven</span>
-        </h1>
-        <p className="text-sm/relaxed sm:text-base/relaxed text-muted-foreground mb-5 max-w-2xl">
-          Compare 200K+ investors across outcome metrics.
-        </p>
+            <span className="text-[0.625rem] font-mono uppercase tracking-wider text-muted-foreground">
+              Real time data
+            </span>
+          </div>
 
-        <div className="flex items-center gap-3 mb-7 flex-wrap">
-          <BrandChip domain="uchicago.edu" name="University of Chicago" alt="UChicago" />
-          <span className="text-muted-foreground">×</span>
-          <BrandChip domain="harmonic.ai" name="Harmonic" alt="Harmonic" />
-        </div>
+          <h1 className="font-heading text-4xl sm:text-5xl tracking-tight leading-[1.05] mb-3">
+            <span className="block text-foreground">Find your next investor</span>
+            <span className="block text-muted-foreground/70">200K+ investors, ranked.</span>
+          </h1>
 
-        <InvestorSearch />
+          <div className="w-full max-w-xl mt-8">
+            <InvestorSearch />
+          </div>
+
+          <div className="mt-12 flex flex-col items-center gap-3">
+            <span className="text-[0.625rem] uppercase tracking-wider text-muted-foreground">
+              Presented by
+            </span>
+            <div className="inline-flex items-center gap-3">
+              <BrandChip domain="harmonic.ai" name="Harmonic" alt="Harmonic" />
+              <span className="text-muted-foreground text-xs">×</span>
+              <BrandChip domain="uchicago.edu" name="University of Chicago" alt="UChicago" />
+            </div>
+          </div>
+        </div>
       </section>
 
-      {/* Methodology cards */}
-      <section className="mb-12">
-        <div className="mb-6 flex items-end justify-between gap-4 flex-wrap">
-          <div>
-            <h2 className="font-heading text-2xl font-semibold text-foreground tracking-tight mb-1">
-              Rankings, by outcome metrics
-            </h2>
-            <p className="text-sm text-muted-foreground">
-              Each card ranks investors by a single outcome metric.
+      {/* Explore investors */}
+      <section className="px-4 sm:px-6 pb-12">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-6">
+            <div className="flex flex-col items-center mb-1.5">
+              <h2 className="font-heading text-2xl sm:text-3xl font-medium text-foreground tracking-tight mb-1.5">
+                <span className="block">Explore top investors</span>
+                <span className="block text-muted-foreground">based on objective data</span>
+              </h2>
+            </div>
+
+          </div>
+
+          <div className="flex flex-col items-center justify-center gap-2 mb-8">
+            <MethodologyFilters />
+            <p className="text-xs/relaxed text-muted-foreground">
+              Apply filters to narrow down investors by focus areas. 
             </p>
           </div>
-          <Button asChild variant="link" size="sm">
-            <Link href="/methodology">
-              Learn more
-              <HugeiconsIcon icon={ArrowRight01Icon} strokeWidth={2} />
-            </Link>
-          </Button>
-        </div>
 
-        <MethodologyFilters />
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {Object.values(METRICS).map(m => {
-            const filtered = getFilteredInvestors({ stage: stages, sector: sectors, geography: geographies, sortBy: m.id, sortDir: 'desc' });
-            const top3 = filtered.slice(0, 3);
-            const formatValue = v => m.unit === '%' ? `${v}%` : `${v} mo`;
-            const href = filterQs ? `/rankings/${m.id}?${filterQs}` : `/rankings/${m.id}`;
-            return (
-              <Link key={m.id} href={href} className="group block">
-                <Card className="h-full py-0 gap-0 transition-all hover:ring-foreground/20 hover:-translate-y-0.5 hover:shadow-sm">
-                  <CardHeader className="border-b pt-5 pb-5">
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center gap-2">
-                        <span className={`w-1.5 h-1.5 rounded-full ${METRIC_DOTS[m.id]}`} />
-                        <span className="text-[0.625rem] font-mono uppercase tracking-wider text-muted-foreground">
-                          {m.displayId}
-                        </span>
-                      </div>
-                      {m.caveat && (
-                        <HugeiconsIcon
-                          icon={Alert02Icon}
-                          strokeWidth={2}
-                          className="size-3 text-amber-500"
-                        />
-                      )}
-                    </div>
-                    <CardTitle className="text-base leading-snug font-semibold">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {Object.values(METRICS).map(m => {
+              const filtered = getFilteredInvestors({
+                stage: stages,
+                sector: sectors,
+                geography: geographies,
+                sortBy: m.id,
+                sortDir: 'desc',
+              });
+              const top3 = filtered.slice(0, 3);
+              const formatValue = v => (m.unit === '%' ? `${v}%` : `${v} mo`);
+              const href = filterQs ? `/rankings/${m.id}?${filterQs}` : `/rankings/${m.id}`;
+              return (
+                <Card key={m.id} className="gap-0 py-0 transition-colors rounded-[28px]">
+                  <div className="px-5 pt-5 pb-5">
+                    <h3 className="font-heading text-base font-semibold text-foreground leading-snug mb-1.5">
                       {m.fullLabel}
-                    </CardTitle>
-                    <CardDescription className="line-clamp-2">
+                    </h3>
+                    <p className="text-xs/relaxed text-muted-foreground">
                       {m.description}
-                    </CardDescription>
-                  </CardHeader>
+                    </p>
+                  </div>
 
-                  <CardContent className="py-5">
+                  <div className="px-3">
                     {top3.length === 0 ? (
-                      <p className="text-xs text-muted-foreground py-2">
+                      <p className="text-xs text-muted-foreground py-6 text-center">
                         No investors match these filters.
                       </p>
                     ) : (
-                      <ol className="space-y-1.5">
+                      <ol className="space-y-2">
                         {top3.map((inv, idx) => (
-                          <li key={inv.id} className="flex items-center gap-2 text-xs/relaxed">
-                            <span className="w-3 text-[0.625rem] font-mono tabular-nums text-muted-foreground flex-shrink-0">
-                              {idx + 1}
-                            </span>
-                            <InvestorLogo investor={inv} className="w-5 h-5 rounded text-[0.5rem]" />
-                            <span className="font-medium text-foreground truncate flex-1 min-w-0">
-                              {inv.name}
-                            </span>
-                            <span className="font-semibold text-foreground tabular-nums whitespace-nowrap">
-                              {formatValue(inv.metrics[m.id])}
-                            </span>
+                          <li key={inv.id}>
+                            <Link
+                              href={`/investors/${inv.slug}`}
+                              style={{ backgroundImage: RANK_GRADIENT[idx] }}
+                              className="flex items-center gap-3 px-4 py-2.5 rounded-2xl ring-1 ring-foreground/5 hover:bg-accent/40 transition-colors"
+                            >
+                              <span className={`w-4 text-xs font-semibold tabular-nums flex-shrink-0 ${RANK_NUM_COLOR[idx]}`}>
+                                {idx + 1}.
+                              </span>
+                              <InvestorLogo
+                                investor={inv}
+                                className="w-7 h-7 rounded-md text-[0.6rem] flex-shrink-0"
+                              />
+                              <span className="font-medium text-foreground text-sm/snug truncate flex-1 min-w-0">
+                                {inv.name}
+                              </span>
+                              <span className="font-semibold text-foreground tabular-nums text-sm whitespace-nowrap">
+                                {formatValue(inv.metrics[m.id])}
+                              </span>
+                            </Link>
                           </li>
                         ))}
                       </ol>
                     )}
-                  </CardContent>
+                  </div>
 
-                  <CardFooter className="border-t pt-5 pb-5 justify-between">
-                    <span className="text-[0.625rem] text-muted-foreground">
-                      Top {top3.length} of {filtered.length}
+                  <div className="py-4 pl-5 pr-3 flex items-center justify-between gap-3">
+                    <span className="text-[0.6875rem] text-muted-foreground tabular-nums">
+                      Top {top3.length} of 25
                     </span>
-                    <span className="text-xs/relaxed font-medium text-foreground inline-flex items-center gap-1 group-hover:gap-1.5 transition-all">
-                      See full ranking
-                      <HugeiconsIcon icon={ArrowRight01Icon} strokeWidth={2} className="size-3" />
-                    </span>
-                  </CardFooter>
+                    <Button asChild size="sm" variant="secondary" className="h-8">
+                      <Link href={href}>
+                        See full ranking
+                        <HugeiconsIcon
+                          icon={ArrowRight01Icon}
+                          strokeWidth={2}
+                          className="size-3"
+                        />
+                      </Link>
+                    </Button>
+                  </div>
                 </Card>
-              </Link>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
       </section>
 
-      {/* Footer banner */}
-      <Card>
-        <CardContent className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 py-2">
-          <div>
-            <p className="font-heading font-semibold text-foreground text-sm mb-1">
-              200K+ investors · {Object.keys(METRICS).length} metrics · 10M+ portfolio companies
-            </p>
-            <p className="text-xs text-muted-foreground">
-              Methodology co-developed with UChicago. Fully transparent, not pay-to-play.
-            </p>
-          </div>
-          <Button asChild size="lg">
-            <Link href="/methodology">
-              How it works
-              <HugeiconsIcon icon={ArrowRight01Icon} strokeWidth={2} />
-            </Link>
-          </Button>
-        </CardContent>
-      </Card>
+      {/* Bottom CTA banner */}
+      <section className="px-4 sm:px-6 pb-20">
+        <div className="max-w-6xl mx-auto">
+          <Card className="rounded-[28px] p-4">
+            <CardContent className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div>
+                <p className="font-heading font-semibold text-foreground text-sm mb-1">
+                  A co-published, data-driven ranking of 200K+ investors
+                </p>
+                <p className="text-xs text-muted-foreground">Powered by Harmonic data</p>
+              </div>
+              <Button asChild size="lg" variant="secondary">
+                <Link href="/methodology">
+                  Learn more
+                  <HugeiconsIcon icon={ArrowRight01Icon} strokeWidth={2} className="size-3" />
+                </Link>
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
     </div>
   );
 }

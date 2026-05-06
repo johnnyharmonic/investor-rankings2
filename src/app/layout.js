@@ -23,9 +23,16 @@ export const metadata = {
   },
 };
 
+const themeInitScript = `
+(function(){try{var t=localStorage.getItem('theme');if(!t)t='dark';if(t==='dark')document.documentElement.classList.add('dark');}catch(e){document.documentElement.classList.add('dark');}})();
+`;
+
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
       <body className="bg-background text-foreground min-h-screen flex flex-col antialiased">
         <Header />
         <main className="flex-1">{children}</main>

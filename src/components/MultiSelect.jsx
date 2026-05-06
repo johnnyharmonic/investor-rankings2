@@ -31,7 +31,7 @@ export default function MultiSelect({ values, onChange, options, placeholder }) 
           type="button"
           aria-label={placeholder}
           className={cn(
-            'flex h-9 min-w-[140px] items-center justify-between gap-2 rounded-md border border-input bg-card px-3 py-2 text-sm transition-colors hover:bg-accent/50',
+            'flex h-9 min-w-[140px] items-center justify-between gap-2 rounded-lg border border-input bg-card px-3 py-2 text-sm transition-colors hover:bg-accent/50',
             'focus:outline-none focus-visible:ring-2 focus-visible:ring-ring'
           )}
         >

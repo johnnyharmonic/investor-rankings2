@@ -7,6 +7,7 @@ import InvestorLogo from '@/components/InvestorLogo';
 import MethodologyFilters from '@/components/MethodologyFilters';
 import PortfolioCompanyCard from '@/components/PortfolioCompanyCard';
 import { cn } from '@/lib/utils';
+import { rankStyle } from '@/lib/rankStyles';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -107,15 +108,22 @@ export default function InvestorPage({ params, searchParams }) {
       {/* Metrics grid */}
       <section className="mb-6">
         <h2 className="font-heading text-base font-semibold text-foreground mb-4">Performance metrics</h2>
-        <MethodologyFilters />
+        <div className="mb-6">
+          <MethodologyFilters />
+        </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
           {Object.values(METRICS).map(metric => {
             const value = inv.metrics[metric.id];
             const display = metric.unit === '%' ? `${value}%` : `${value} mo`;
             const breakdown = getMetricBreakdown(inv, metric.id);
             const rank = ranks[metric.id];
+            const podium = rankStyle(rank, 'tr');
             return (
-              <Card key={metric.id} className="group relative hover:ring-foreground/20 transition-colors">
+              <Card
+                key={metric.id}
+                style={podium ? { backgroundImage: podium.gradient } : undefined}
+                className="group relative hover:ring-foreground/20 transition-colors"
+              >
                 <CardContent>
                   <div className="flex items-start justify-between gap-2 mb-2">
                     <p className="text-[0.625rem] font-medium text-muted-foreground leading-tight">
@@ -133,8 +141,8 @@ export default function InvestorPage({ params, searchParams }) {
                         <span
                           className={cn(
                             'inline-flex items-center px-1.5 py-0.5 rounded-md text-[0.625rem] font-semibold tabular-nums',
-                            rank <= 3
-                              ? 'bg-emerald-100 text-emerald-700'
+                            podium
+                              ? `${podium.pillBg} ${podium.numColor}`
                               : 'bg-muted text-muted-foreground'
                           )}
                           title={`Rank #${rank} on ${metric.fullLabel}`}

@@ -8,6 +8,7 @@ import InvestorLogo from '@/components/InvestorLogo';
 import MethodologyFilters from '@/components/MethodologyFilters';
 import ShareButton from '@/components/ShareButton';
 import { parseFilterValues } from '@/lib/filters';
+import { RANK_GRADIENT, RANK_NUM_COLOR } from '@/lib/rankStyles';
 
 const TABLE_LIMIT = 25;
 
@@ -43,7 +44,9 @@ export default function MethodologyRankingsList({ metric }) {
 
   return (
     <>
-      <MethodologyFilters endSlot={<ShareButton />} />
+      <div className="mb-6">
+        <MethodologyFilters endSlot={<ShareButton />} />
+      </div>
 
       {/* Ranked list */}
       <Card className="p-0 gap-0">
@@ -65,15 +68,18 @@ export default function MethodologyRankingsList({ metric }) {
             {sorted.map((inv, idx) => {
               const value = inv.metrics[metric.id];
               const isTop = idx < 3;
+              const rankColor = isTop ? RANK_NUM_COLOR[idx] : 'text-muted-foreground';
+              const rankBg = isTop ? RANK_GRADIENT[idx] : undefined;
               return (
                 <li key={inv.id}>
                   <Link
                     href={filterQs ? `/investors/${inv.slug}?${filterQs}` : `/investors/${inv.slug}`}
+                    style={rankBg ? { backgroundImage: rankBg } : undefined}
                     className="flex items-center gap-4 px-4 py-3 hover:bg-accent/50 transition-colors group"
                   >
                     <div className="w-10 flex-shrink-0">
-                      <span className={`inline-flex items-center justify-center w-6 h-6 rounded-full text-[0.625rem] font-bold ${
-                        isTop ? 'bg-emerald-100 text-emerald-700' : 'bg-muted text-muted-foreground'
+                      <span className={`inline-flex items-center justify-center w-6 h-6 rounded-full text-xs font-bold tabular-nums ${
+                        isTop ? `bg-transparent ${rankColor}` : 'bg-muted text-muted-foreground'
                       }`}>
                         {idx + 1}
                       </span>
@@ -94,7 +100,7 @@ export default function MethodologyRankingsList({ metric }) {
                     <div className="hidden md:block w-32 min-w-0 text-xs text-muted-foreground truncate">{inv.geography}</div>
                     <div className="w-32 min-w-0 flex items-center gap-3 justify-end">
                       {metric.unit === '%' && (
-                        <PercentRing value={value} isTop={isTop} className="hidden sm:block flex-shrink-0" />
+                        <PercentRing value={value} rankIdx={isTop ? idx : -1} className="hidden sm:block flex-shrink-0" />
                       )}
                       <span className="text-sm font-semibold text-foreground tabular-nums whitespace-nowrap">
                         {formatValue(value)}
@@ -111,11 +117,14 @@ export default function MethodologyRankingsList({ metric }) {
   );
 }
 
-function PercentRing({ value, isTop, className = '' }) {
+const RING_STROKE = ['stroke-amber-400', 'stroke-slate-300', 'stroke-[#c89882]'];
+
+function PercentRing({ value, rankIdx, className = '' }) {
   const r = 6;
   const c = 2 * Math.PI * r;
   const pct = Math.max(0, Math.min(100, value));
   const dash = (pct / 100) * c;
+  const stroke = rankIdx >= 0 && rankIdx < 3 ? RING_STROKE[rankIdx] : 'stroke-foreground/30';
   return (
     <svg width="16" height="16" viewBox="0 0 16 16" className={`-rotate-90 ${className}`} aria-hidden="true">
       <circle cx="8" cy="8" r={r} fill="none" strokeWidth="2" className="stroke-muted" />
@@ -127,7 +136,7 @@ function PercentRing({ value, isTop, className = '' }) {
         strokeWidth="2"
         strokeLinecap="round"
         strokeDasharray={`${dash} ${c}`}
-        className={isTop ? 'stroke-emerald-500' : 'stroke-foreground/30'}
+        className={stroke}
       />
     </svg>
   );

@@ -34,10 +34,7 @@ export default function MethodologyFilters({ endSlot }) {
   }
 
   return (
-    <div className="mb-6 flex flex-col sm:flex-row gap-2 flex-wrap items-stretch sm:items-center">
-      <span className="text-[0.625rem] font-medium text-muted-foreground uppercase tracking-wider self-center sm:mr-1">
-        Filter
-      </span>
+    <div className="flex flex-col sm:flex-row gap-2 flex-wrap items-stretch sm:items-center">
       <MultiSelect
         values={stages}
         onChange={v => update('stage', v)}

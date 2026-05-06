@@ -58,8 +58,8 @@ export default function CorrectionForm({ investorName, investorSlug }) {
 
         {submitted ? (
           <div className="text-center py-8">
-            <div className="w-10 h-10 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-3">
-              <HugeiconsIcon icon={Tick02Icon} strokeWidth={2} className="size-5 text-emerald-600" />
+            <div className="w-10 h-10 bg-emerald-100 dark:bg-emerald-500/15 rounded-full flex items-center justify-center mx-auto mb-3">
+              <HugeiconsIcon icon={Tick02Icon} strokeWidth={2} className="size-5 text-emerald-600 dark:text-emerald-300" />
             </div>
             <h4 className="font-heading font-semibold text-sm text-foreground mb-1">Submission received</h4>
             <p className="text-xs text-muted-foreground mb-4">
