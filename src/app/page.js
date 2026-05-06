@@ -58,7 +58,7 @@ export default function HomePage({ searchParams }) {
           <span className="block text-muted-foreground/60">Objective, data-driven</span>
         </h1>
         <p className="text-sm/relaxed sm:text-base/relaxed text-muted-foreground mb-5 max-w-2xl">
-          Compare 200K+ investors across 9 outcome metrics.
+          Compare 200K+ investors across outcome metrics.
         </p>
 
         <div className="flex items-center gap-3 mb-7 flex-wrap">
@@ -105,7 +105,7 @@ export default function HomePage({ searchParams }) {
                       <div className="flex items-center gap-2">
                         <span className={`w-1.5 h-1.5 rounded-full ${METRIC_DOTS[m.id]}`} />
                         <span className="text-[0.625rem] font-mono uppercase tracking-wider text-muted-foreground">
-                          {m.id}
+                          {m.displayId}
                         </span>
                       </div>
                       {m.caveat && (
@@ -170,7 +170,7 @@ export default function HomePage({ searchParams }) {
         <CardContent className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 py-2">
           <div>
             <p className="font-heading font-semibold text-foreground text-sm mb-1">
-              200K+ investors · 9 metrics · 10M+ portfolio companies
+              200K+ investors · {Object.keys(METRICS).length} metrics · 10M+ portfolio companies
             </p>
             <p className="text-xs text-muted-foreground">
               Methodology co-developed with UChicago. Fully transparent, not pay-to-play.

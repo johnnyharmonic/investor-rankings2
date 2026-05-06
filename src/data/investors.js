@@ -5,67 +5,27 @@
 export const METRICS = {
   "m1": {
     "id": "m1",
+    "displayId": "M1",
     "label": "Next round prob.",
     "fullLabel": "Next round probability",
     "unit": "%",
     "description": "Probability that a portfolio company raises at least one additional round after the investor's entry."
   },
-  "m2": {
-    "id": "m2",
-    "label": "Time to next round",
-    "fullLabel": "Median time to next round",
-    "unit": "mo",
-    "description": "Median months between the investor's entry round and the company's next financing round."
-  },
   "m3": {
     "id": "m3",
+    "displayId": "M2",
     "label": "Follow-on prob.",
     "fullLabel": "Follow-on probability",
     "unit": "%",
     "description": "Probability that the investor participates in the company's next round."
   },
-  "m4": {
-    "id": "m4",
-    "label": "Deal size scale-up",
-    "fullLabel": "Scale-up rate (deal size)",
-    "unit": "%",
-    "description": "Share of portfolio companies whose next round had a larger deal size than the entry round."
-  },
-  "m5": {
-    "id": "m5",
-    "label": "Valuation scale-up",
-    "fullLabel": "Scale-up rate (valuation)",
-    "unit": "%",
-    "caveat": true,
-    "description": "Share of portfolio companies whose next round had a higher post-money valuation. Note: valuation estimates carry a higher error rate."
-  },
   "m6": {
     "id": "m6",
+    "displayId": "M3",
     "label": "Exit prob.",
     "fullLabel": "Exit probability",
     "unit": "%",
     "description": "Probability that a portfolio company eventually experiences an exit-type deal (IPO or M&A)."
-  },
-  "m7": {
-    "id": "m7",
-    "label": "Time to exit",
-    "fullLabel": "Median time to exit",
-    "unit": "mo",
-    "description": "Median months between the investor's entry and the company's exit event (IPO or M&A)."
-  },
-  "m8": {
-    "id": "m8",
-    "label": "Unicorn conversion",
-    "fullLabel": "Unicorn conversion rate",
-    "unit": "%",
-    "description": "Probability that a portfolio company reaches a valuation of $1B or above."
-  },
-  "m9": {
-    "id": "m9",
-    "label": "Unicorn exit rate",
-    "fullLabel": "Unicorn exit rate",
-    "unit": "%",
-    "description": "Probability that a unicorn in which the investor has invested goes through an exit-type deal."
   }
 };
 

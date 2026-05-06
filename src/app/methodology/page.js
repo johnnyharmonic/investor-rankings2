@@ -55,7 +55,7 @@ export default function MethodologyPage() {
           ensuring the metrics are robust, reproducible, and not gameable.
         </p>
         <p className="mt-3">
-          Each investor is evaluated across 9 outcome-based metrics (M1–M9). These are then combined into
+          Each investor is evaluated across a set of outcome-based metrics. These are then combined into
           a composite score (0–100) using a weighted average, with weights determined by the UChicago team
           based on their relevance to founder outcomes.
         </p>
@@ -141,7 +141,7 @@ export default function MethodologyPage() {
         </p>
       </Section>
 
-      <Section title="The 9 metrics">
+      <Section title="Outcome metrics">
         <div className="space-y-3">
           {Object.values(METRICS).map(m => (
             <Card key={m.id} className="hover:ring-foreground/20 transition-colors">
@@ -149,7 +149,7 @@ export default function MethodologyPage() {
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
                     <div className="flex items-center gap-2 mb-1 flex-wrap">
-                      <Badge variant="outline" className="font-mono uppercase">{m.id}</Badge>
+                      <Badge variant="outline" className="font-mono uppercase">{m.displayId}</Badge>
                       <span className="font-semibold text-sm text-foreground">{m.fullLabel}</span>
                       {m.caveat && (
                         <span className="text-[0.625rem] text-amber-600 inline-flex items-center gap-0.5">
@@ -172,13 +172,9 @@ export default function MethodologyPage() {
 
       <Section title="Composite score">
         <p>
-          The composite score (0–100) is a weighted average of the 9 metrics. Metrics are normalized to a
-          0–100 scale relative to the distribution of all investors in the dataset. Weights are set by the
-          UChicago research team and will be published in their forthcoming academic paper.
-        </p>
-        <p className="mt-3">
-          For directional metrics (M2 Financing velocity, M7 Time to exit), lower values are better —
-          meaning investors whose portfolio companies move faster are ranked higher.
+          The composite score (0–100) is a weighted average of the visible outcome metrics. Metrics are
+          normalized to a 0–100 scale relative to the distribution of all investors in the dataset. Weights
+          are set by the UChicago research team and will be published in their forthcoming academic paper.
         </p>
       </Section>
 
@@ -220,7 +216,7 @@ export default function MethodologyPage() {
           <FAQ q="Why does [Metric] matter to me as a founder?">
             Each metric is designed to proxy something a founder cares about: Will this investor help
             me raise my next round? How quickly? Will they follow on? What's my probability of exiting?
-            Taken together, the 9 metrics give a multi-dimensional picture of investor quality.
+            Taken together, the metrics give a multi-dimensional picture of investor quality.
           </FAQ>
           <FAQ q="Can I correct data about my fund?">
             Yes. If you believe any data in the rankings is inaccurate, please use the
@@ -239,7 +235,7 @@ export default function MethodologyPage() {
         <CardContent className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
             <h3 className="font-heading font-semibold text-sm text-foreground mb-1">Ready to explore the rankings?</h3>
-            <p className="text-xs text-muted-foreground">See how investors compare across all 9 metrics.</p>
+            <p className="text-xs text-muted-foreground">See how investors compare across each outcome metric.</p>
           </div>
           <Button asChild size="lg">
             <Link href="/">

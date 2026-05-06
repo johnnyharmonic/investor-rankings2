@@ -43,7 +43,7 @@ export default function MethodologyRankingsPage({ params, searchParams }) {
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
       <header className="mb-8">
         <div className="flex items-center gap-2 mb-3 flex-wrap">
-          <Badge variant="outline" className="font-mono uppercase">{metric.id}</Badge>
+          <Badge variant="outline" className="font-mono uppercase">{metric.displayId}</Badge>
           {metric.caveat && (
             <Badge variant="destructive">⚠ Higher uncertainty</Badge>
           )}
@@ -73,7 +73,7 @@ export default function MethodologyRankingsPage({ params, searchParams }) {
                 <Card className="transition-colors hover:ring-foreground/20">
                   <CardContent>
                     <p className="text-[0.625rem] font-mono uppercase text-muted-foreground mb-1">
-                      {m.id}
+                      {m.displayId}
                     </p>
                     <p className="text-xs/relaxed font-medium text-foreground leading-tight">
                       {m.fullLabel}
