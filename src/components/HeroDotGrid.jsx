@@ -143,7 +143,7 @@ export default function HeroDotGrid() {
       // the sphere as the first methodology comes into view.
       const zoomT = reduceMotion ? 0 : easeInOutCubic(Math.max(0, Math.min(1, smoothPhase)));
       const zoom = 1 + zoomT * 2.2;
-      const radius = Math.min(width, height) * 0.45 * zoom;
+      const radius = Math.min(width, height) * 0.4 * zoom;
 
       const idx = Math.min(SHAPES.length - 2, Math.max(0, Math.floor(smoothPhase)));
       const tt = Math.min(1, Math.max(0, smoothPhase - idx));

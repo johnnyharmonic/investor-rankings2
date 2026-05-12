@@ -16,7 +16,7 @@ export const metadata = {
 import { PODIUM_GRADIENT, PODIUM_NUM_STYLE } from '@/lib/rankStyles';
 import { ordinalParts } from '@/lib/insights';
 
-function MetricSection({ metric }) {
+function MetricSection({ metric, idx }) {
   const top3 = getFilteredInvestors({
     sortBy: metric.id,
     sortDir: 'desc',
@@ -28,14 +28,17 @@ function MetricSection({ metric }) {
       <div className="w-full max-w-[1540px] mx-auto grid grid-cols-1 lg:grid-cols-[1fr_420px] items-center gap-10 lg:gap-6">
         {/* Left — title, description, CTA */}
         <div className="flex flex-col gap-4 lg:px-10 lg:py-4">
+          <span className="inline-flex w-fit items-center px-2 py-0.5 rounded-full bg-foreground/10 ring-1 ring-foreground/15 font-mono text-[0.6875rem] font-medium tabular-nums text-foreground">
+            #{idx + 1}
+          </span>
           <h2 className="font-heading text-3xl sm:text-4xl text-foreground tracking-tight leading-[1.1]">
             {metric.fullLabel}
           </h2>
           <p className="text-base/relaxed text-muted-foreground max-w-md">
             {metric.description}
           </p>
-          <div>
-            <Button asChild size="lg" variant="secondary">
+          <div className="mt-1">
+            <Button asChild size="lg" variant="default">
               <Link href={`/rankings/${metric.id}`}>
                 See full ranking
                 <HugeiconsIcon icon={ArrowRight01Icon} strokeWidth={2} className="size-3.5" />
@@ -53,9 +56,9 @@ function MetricSection({ metric }) {
                 key={inv.id}
                 href={`/investors/${inv.slug}`}
                 style={{ backgroundImage: PODIUM_GRADIENT[idx] }}
-                className="group flex-1 min-h-[130px] flex items-center gap-3 rounded-[28px] border border-border dark:border-white/[0.06] p-3.5 backdrop-blur-md transition-colors hover:bg-accent/30"
+                className="group flex-1 min-h-[130px] flex gap-3 rounded-[28px] border border-border dark:border-white/[0.06] p-3.5 backdrop-blur-md transition-colors hover:bg-accent/30"
               >
-                <div className="flex flex-1 min-w-0 h-full flex-col justify-between p-1.5">
+                <div className="flex flex-1 min-w-0 flex-col justify-between p-1.5 gap-3">
                   <p
                     className="font-mono text-xl font-medium leading-none tracking-tight tabular-nums"
                     style={PODIUM_NUM_STYLE[idx]}
@@ -73,10 +76,12 @@ function MetricSection({ metric }) {
                     </p>
                   </div>
                 </div>
-                <InvestorLogo
-                  investor={inv}
-                  className="aspect-square h-full max-h-[104px] w-auto rounded-[10px] text-xl"
-                />
+                <div className="flex-shrink-0 flex items-center">
+                  <InvestorLogo
+                    investor={inv}
+                    className="size-20 md:size-[104px] rounded-[10px] text-xl"
+                  />
+                </div>
               </Link>
             );
           })}
@@ -120,14 +125,14 @@ export default function HomePage() {
         </div>
 
         <div className="pointer-events-none absolute inset-x-0 bottom-8 flex flex-col items-center gap-2 text-foreground/80 animate-bounce">
-          <span className="text-xs font-mono uppercase tracking-[0.15em]">Scroll</span>
+          <span className="text-xs font-mono uppercase tracking-[0.15em]">Explore ranking views</span>
           <HugeiconsIcon icon={ArrowDown01Icon} strokeWidth={2.5} className="size-5" />
         </div>
       </section>
 
       {/* Three full-width metric sections */}
-      {Object.values(METRICS).map(m => (
-        <MetricSection key={m.id} metric={m} />
+      {Object.values(METRICS).map((m, i) => (
+        <MetricSection key={m.id} metric={m} idx={i} />
       ))}
     </div>
   );

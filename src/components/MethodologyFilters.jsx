@@ -65,7 +65,7 @@ function useFilterState() {
 }
 
 // Debounced search input — keeps typing snappy without thrashing the URL.
-function SearchInput() {
+export function SearchInput() {
   const { query, updateQuery } = useFilterState();
   const [local, setLocal] = useState(query);
 
@@ -168,11 +168,10 @@ export function FiltersMobileTrigger({ className }) {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <Button variant="outline" size="sm" className={cn('gap-2', className)}>
-          <HugeiconsIcon icon={FilterIcon} strokeWidth={2} className="size-3.5" />
-          <span>Filters</span>
+        <Button variant="outline" size="icon" aria-label="Filters" className={cn('relative size-9 rounded-full', className)}>
+          <HugeiconsIcon icon={FilterIcon} strokeWidth={2} className="size-4" />
           {total > 0 && (
-            <span className="inline-flex items-center justify-center rounded-full bg-foreground text-background text-[0.625rem] font-semibold tabular-nums min-w-[1.125rem] h-[1.125rem] px-1.5">
+            <span className="absolute -top-1 -right-1 inline-flex items-center justify-center rounded-full bg-foreground text-background text-[0.625rem] font-semibold tabular-nums min-w-[1.125rem] h-[1.125rem] px-1">
               {total}
             </span>
           )}

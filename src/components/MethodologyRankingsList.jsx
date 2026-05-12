@@ -79,7 +79,7 @@ export default function MethodologyRankingsList({ metric }) {
             GRID_COLS,
           )}
         >
-          <div className="text-center">Rank</div>
+          <div className="text-center">#</div>
           <div>Name</div>
           <div>{metric.fullLabel}</div>
           <div>Type</div>
@@ -122,7 +122,7 @@ export default function MethodologyRankingsList({ metric }) {
       </div>
 
       {/* === <md: card layout === */}
-      <div className="md:hidden flex flex-col gap-2">
+      <div className="md:hidden flex flex-col gap-2 p-3">
         {visible.length === 0 ? (
           <EmptyState />
         ) : (

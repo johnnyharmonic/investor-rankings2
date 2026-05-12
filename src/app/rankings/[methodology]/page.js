@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import { METRICS } from '@/data/investors';
 import MethodologyRankingsList from '@/components/MethodologyRankingsList';
 import MethodologyTabs from '@/components/MethodologyTabs';
-import { FilterControls, FiltersMobileTrigger } from '@/components/MethodologyFilters';
+import { FilterControls, FiltersMobileTrigger, SearchInput } from '@/components/MethodologyFilters';
 import ShareButton from '@/components/ShareButton';
 import BrandChip from '@/components/BrandChip';
 import TableBorderRunner from '@/components/TableBorderRunner';
@@ -71,11 +71,15 @@ export default function MethodologyRankingsPage({ params }) {
         </aside>
 
         <main className="min-w-0">
-          <div className="lg:hidden mb-4 flex items-center justify-between gap-2">
-            <Suspense fallback={<div className="h-8 w-24" />}>
+          <div className="lg:hidden mb-4 flex items-center gap-2 p-3">
+            <Suspense fallback={<div className="h-9 flex-1" />}>
+              <div className="flex-1">
+                <SearchInput />
+              </div>
+            </Suspense>
+            <Suspense fallback={<div className="size-9" />}>
               <FiltersMobileTrigger />
             </Suspense>
-            <ShareButton />
           </div>
 
           <div className="overflow-hidden rounded-[40px] lg:rounded-l-none">
