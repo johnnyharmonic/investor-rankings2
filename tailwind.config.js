@@ -74,6 +74,7 @@ module.exports = {
       fontFamily: {
         sans:  ['Inter', 'system-ui', 'sans-serif'],
         serif: ['Georgia', 'serif'],
+        mono:  ['"SF Mono"', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
       },
       keyframes: {
         'accordion-down': {

@@ -106,7 +106,7 @@ export default function MethodologyRankingsList({ metric }) {
                   >
                     <RankCell idx={idx} />
                     <NameCell inv={inv} />
-                    <span className="text-sm font-medium text-foreground tabular-nums whitespace-nowrap">
+                    <span className="font-mono text-sm font-medium text-foreground tabular-nums whitespace-nowrap">
                       {formatValue(value)}
                     </span>
                     <Pill label={typeShort(inv.primaryType)} title={inv.primaryType} tint={typeTint(inv.primaryType)} />
@@ -149,7 +149,7 @@ export default function MethodologyRankingsList({ metric }) {
                   </div>
                   <div className="flex items-center gap-2 flex-shrink-0">
                     {metric.unit === '%' && <PercentRing value={value} rankIdx={isTop ? idx : -1} />}
-                    <span className="text-sm font-semibold text-foreground tabular-nums whitespace-nowrap">
+                    <span className="font-mono text-sm font-semibold text-foreground tabular-nums whitespace-nowrap">
                       {formatValue(value)}
                     </span>
                   </div>
@@ -177,7 +177,7 @@ function RankCell({ idx }) {
   return (
     <span
       className={cn(
-        'inline-flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold tabular-nums flex-shrink-0',
+        'inline-flex items-center justify-center w-7 h-7 rounded-full font-mono text-xs font-bold tabular-nums flex-shrink-0',
         isTop ? `bg-transparent ${RANK_NUM_COLOR[idx]}` : 'bg-muted text-muted-foreground',
       )}
     >

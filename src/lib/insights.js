@@ -92,6 +92,12 @@ function insightsForMetric(investor, metricId) {
     const rank = rankIn(investor, metricId, combo);
     if (rank !== null && rank <= TOP_N) out.push({ metricId, rank, combo });
   }
+  // If the investor is #1 among all investors for this metric, every
+  // narrower-cohort insight would also be #1 — drop them to avoid clutter.
+  const allInvestorsTop = out.find(
+    ins => ins.rank === 1 && !ins.combo.type && !ins.combo.stage && !ins.combo.sector && !ins.combo.geography,
+  );
+  if (allInvestorsTop) return [allInvestorsTop];
   return out;
 }
 
@@ -139,6 +145,30 @@ const GEO_PHRASE = {
   'Los Angeles': 'Los Angeles',
   'Austin': 'Austin',
 };
+
+// Ordinal suffix for a positive integer (1 → 1st, 2 → 2nd, 3 → 3rd, 4 → 4th, …).
+export function ordinal(n) {
+  const s = ['th', 'st', 'nd', 'rd'];
+  const v = n % 100;
+  return `${n}${s[(v - 20) % 10] || s[v] || s[0]}`;
+}
+
+// Same as ordinal() but returns the number and suffix separately, so callers
+// can render the suffix (e.g. "st") at a different size or alignment.
+export function ordinalParts(n) {
+  const s = ['th', 'st', 'nd', 'rd'];
+  const v = n % 100;
+  return { number: String(n), suffix: s[(v - 20) % 10] || s[v] || s[0] };
+}
+
+// Short "filter focus" label used on the highlight-card pill (top-right).
+export function scopePillLabel(combo = {}) {
+  if (combo.type) return `${combo.type} focus`;
+  if (combo.stage) return `${combo.stage} focus`;
+  if (combo.sector) return `${combo.sector} focus`;
+  if (combo.geography) return `${combo.geography} focus`;
+  return 'All';
+}
 
 export function scopeLabel({ type, stage, sector, geography } = {}) {
   if (!type && !stage && !sector && !geography) return 'among all investors';

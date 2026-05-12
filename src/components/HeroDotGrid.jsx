@@ -95,10 +95,18 @@ export default function HeroDotGrid() {
     const start = performance.now();
     const transformed = new Array(nodes.length);
     let smoothPhase = 0;
+    // Accumulator that advances at the motion-scaled rate. Rotation, tilt,
+    // and per-node jitter all read this instead of raw `t`, so when the
+    // zoom dampens motionScale to 0 the angles freeze (rather than snapping
+    // back to their formula-derived value at the new scaled time).
+    let slowedTime = 0;
+    let lastT = -1;
     let raf = 0;
 
     function frame(now) {
       const t = now - start;
+      const dt = lastT < 0 ? 0 : t - lastT;
+      lastT = t;
       ctx.clearRect(0, 0, width, height);
 
       const cx = width / 2;
@@ -126,9 +134,13 @@ export default function HeroDotGrid() {
       const twist = lerp(a.twist, b.twist, tt);
 
       // Continuous rotation. Add a tiny tilt that slowly oscillates so the
-      // sphere never settles into a flat-feeling spin.
-      const rotY = reduceMotion ? 0.4 : (t / 1000) * 0.22;
-      const rotX = reduceMotion ? 0.18 : Math.sin(t / 5200) * 0.18 + 0.05;
+      // sphere never settles into a flat-feeling spin. When the camera
+      // zooms in, motion-time advance is throttled so the rotation slows
+      // (but never stops) — the up-close swarm shouldn't feel chaotic.
+      const motionScale = 1 - zoomT * 0.7;
+      slowedTime += dt * motionScale;
+      const rotY = reduceMotion ? 0.4 : (slowedTime / 1000) * 0.22;
+      const rotX = reduceMotion ? 0.18 : Math.sin(slowedTime / 5200) * 0.18 + 0.05;
       const cosY = Math.cos(rotY), sinY = Math.sin(rotY);
       const cosX = Math.cos(rotX), sinX = Math.sin(rotX);
 
@@ -144,10 +156,11 @@ export default function HeroDotGrid() {
         }
 
         // Per-node entropy jitter — small phase-shifted oscillations on each
-        // axis so the swarm always shimmers a little.
-        const jx = reduceMotion ? 0 : Math.sin(t * p.eFx + p.ePx) * p.eAx;
-        const jy = reduceMotion ? 0 : Math.sin(t * p.eFy + p.ePy) * p.eAy;
-        const jz = reduceMotion ? 0 : Math.sin(t * p.eFz + p.ePz) * p.eAz;
+        // axis so the swarm always shimmers a little. Driven by slowedTime
+        // so it freezes alongside the rotation when zoomed in.
+        const jx = reduceMotion ? 0 : Math.sin(slowedTime * p.eFx + p.ePx) * p.eAx;
+        const jy = reduceMotion ? 0 : Math.sin(slowedTime * p.eFy + p.ePy) * p.eAy;
+        const jz = reduceMotion ? 0 : Math.sin(slowedTime * p.eFz + p.ePz) * p.eAz;
 
         // Settle from scatter-origin to base sphere position, then deform.
         let bx = p.sx + (p.x + jx - p.sx) * settle;
@@ -183,11 +196,13 @@ export default function HeroDotGrid() {
         };
       }
 
+      // Slight dim when zoomed in so the up-close dots don't read as harsh.
+      const brightness = 1 - zoomT * 0.3;
       for (let i = 0; i < transformed.length; i++) {
         const A = transformed[i];
         const depth = Math.max(0, Math.min(1, (A.z + 1) / 2));
         const size = 0.35 + depth * 0.85;
-        const alpha = (0.18 + depth * 0.62) * A.fadeIn;
+        const alpha = (0.18 + depth * 0.62) * A.fadeIn * brightness;
         ctx.beginPath();
         ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
         ctx.arc(A.px, A.py, size, 0, Math.PI * 2);

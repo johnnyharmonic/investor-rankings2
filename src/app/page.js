@@ -13,15 +13,7 @@ export const metadata = {
     'Discover which VCs are most likely to help your company raise follow-on, grow faster, and reach an exit. Objective data-driven rankings for founders.',
 };
 
-// Linear-gradient podium tints, lifted from the Figma:
-// gold / silver / copper, anchored top-left, fading toward bottom-right.
-const PODIUM_GRADIENT = [
-  'linear-gradient(117deg, rgba(160, 147, 0, 0.10) 12%, rgba(255, 255, 255, 0.002) 70%)',
-  'linear-gradient(121deg, rgba(255, 255, 255, 0.08) 13%, rgba(255, 255, 255, 0.002) 70%)',
-  'linear-gradient(119deg, rgba(137, 93, 49, 0.10) 11%, rgba(255, 255, 255, 0.002) 70%)',
-];
-
-const PODIUM_NUM_COLOR = ['text-amber-400', 'text-slate-200', 'text-[#cc6600]'];
+import { PODIUM_GRADIENT, PODIUM_NUM_COLOR } from '@/lib/rankStyles';
 
 function MetricSection({ metric }) {
   const top3 = getFilteredInvestors({
