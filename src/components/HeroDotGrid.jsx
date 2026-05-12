@@ -16,6 +16,17 @@ const SHAPES = [
   { sx: 0.95, sy: 1.05, sz: 0.95, twist: 1.10 }, // 3: exit — strong twist
 ];
 
+// A handful of accent rgb-triplet strings used in `rgba(R, G, B, a)`. Only a
+// small fraction of the sphere's dots get colored — the rest stay white.
+const ACCENT_COLORS = [
+  '125, 211, 252', // sky-300
+  '167, 139, 250', // violet-400
+  '249, 168, 212', // pink-300
+  '110, 231, 183', // emerald-300
+  '253, 224, 71',  // yellow-300
+];
+const ACCENT_RATE = 0.045; // ~4.5% of nodes get an accent colour.
+
 // Fibonacci-spiral distribution on a unit sphere.
 function buildNodes(count) {
   const golden = Math.PI * (3 - Math.sqrt(5));
@@ -35,6 +46,11 @@ function buildNodes(count) {
     const sy = Math.cos(sb) * sd;
     const sz = Math.sin(sb) * Math.sin(sa) * sd;
 
+    const colored = Math.random() < ACCENT_RATE;
+    const color = colored
+      ? ACCENT_COLORS[Math.floor(Math.random() * ACCENT_COLORS.length)]
+      : '255, 255, 255';
+
     nodes.push({
       x, y, z,
       sx, sy, sz,
@@ -50,6 +66,10 @@ function buildNodes(count) {
       ePx: Math.random() * Math.PI * 2,
       ePy: Math.random() * Math.PI * 2,
       ePz: Math.random() * Math.PI * 2,
+      // Per-node size multiplier so the swarm isn't perfectly uniform.
+      sizeMul: 0.7 + Math.random() * 0.8,
+      color,
+      colored,
     });
   }
   return nodes;
@@ -200,11 +220,16 @@ export default function HeroDotGrid() {
       const brightness = 1 - zoomT * 0.3;
       for (let i = 0; i < transformed.length; i++) {
         const A = transformed[i];
+        const p = nodes[i];
         const depth = Math.max(0, Math.min(1, (A.z + 1) / 2));
-        const size = 0.35 + depth * 0.85;
-        const alpha = (0.18 + depth * 0.62) * A.fadeIn * brightness;
+        // Accent dots render a touch larger and considerably brighter so the
+        // splash of colour pops against the dense white swarm.
+        const sizeBoost = p.colored ? 1.3 : 1;
+        const size = (0.35 + depth * 0.85) * p.sizeMul * sizeBoost;
+        const alphaBase = (0.18 + depth * 0.62) * A.fadeIn * brightness;
+        const alpha = p.colored ? Math.min(1, alphaBase * 1.8 + 0.2) : alphaBase;
         ctx.beginPath();
-        ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+        ctx.fillStyle = `rgba(${p.color}, ${alpha})`;
         ctx.arc(A.px, A.py, size, 0, Math.PI * 2);
         ctx.fill();
       }

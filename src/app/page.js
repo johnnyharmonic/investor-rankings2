@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { METRICS, getFilteredInvestors } from '@/data/investors';
+import { METRICS, getFilteredInvestors, getMetricBreakdown } from '@/data/investors';
 import InvestorLogo from '@/components/InvestorLogo';
 import BrandChip from '@/components/BrandChip';
 import HeroDotGrid from '@/components/HeroDotGrid';
@@ -13,7 +13,8 @@ export const metadata = {
     'Discover which VCs are most likely to help your company raise follow-on, grow faster, and reach an exit. Objective data-driven rankings for founders.',
 };
 
-import { PODIUM_GRADIENT, PODIUM_NUM_COLOR } from '@/lib/rankStyles';
+import { PODIUM_GRADIENT, PODIUM_NUM_STYLE } from '@/lib/rankStyles';
+import { ordinalParts } from '@/lib/insights';
 
 function MetricSection({ metric }) {
   const top3 = getFilteredInvestors({
@@ -45,35 +46,40 @@ function MetricSection({ metric }) {
 
         {/* Right — 3 stacked podium cards (gold / silver / copper) */}
         <div className="w-full lg:w-[420px] lg:h-[420px] flex flex-col gap-4">
-          {top3.map((inv, idx) => (
-            <Link
-              key={inv.id}
-              href={`/investors/${inv.slug}`}
-              style={{ backgroundImage: PODIUM_GRADIENT[idx] }}
-              className="group flex-1 min-h-[130px] flex items-center gap-3 rounded-[28px] border border-border dark:border-white/[0.06] p-3.5 backdrop-blur-md transition-colors hover:bg-accent/30"
-            >
-              <div className="flex flex-1 min-w-0 h-full flex-col justify-between p-1.5">
-                <p
-                  className={`font-heading text-xl leading-none tracking-tight ${PODIUM_NUM_COLOR[idx]}`}
-                  style={{ mixBlendMode: 'screen' }}
-                >
-                  {idx + 1}.
-                </p>
-                <div className="flex items-center gap-3 w-full min-w-0">
-                  <p className="font-medium text-foreground text-base/snug truncate flex-1 min-w-0">
-                    {inv.name}
+          {top3.map((inv, idx) => {
+            const breakdown = getMetricBreakdown(inv, metric.id);
+            return (
+              <Link
+                key={inv.id}
+                href={`/investors/${inv.slug}`}
+                style={{ backgroundImage: PODIUM_GRADIENT[idx] }}
+                className="group flex-1 min-h-[130px] flex items-center gap-3 rounded-[28px] border border-border dark:border-white/[0.06] p-3.5 backdrop-blur-md transition-colors hover:bg-accent/30"
+              >
+                <div className="flex flex-1 min-w-0 h-full flex-col justify-between p-1.5">
+                  <p
+                    className="font-mono text-xl font-medium leading-none tracking-tight tabular-nums"
+                    style={PODIUM_NUM_STYLE[idx]}
+                  >
+                    {ordinalParts(idx + 1).number}
+                    <span className="text-[0.6875rem] align-top">{ordinalParts(idx + 1).suffix}</span>
                   </p>
-                  <p className="font-mono text-xs tabular-nums text-foreground whitespace-nowrap">
-                    {formatValue(inv.metrics[metric.id])}
-                  </p>
+                  <div className="min-w-0">
+                    <p className="font-medium text-foreground text-base/snug truncate">
+                      {inv.name}
+                    </p>
+                    <p className="text-xs text-muted-foreground tabular-nums truncate mt-0.5">
+                      {breakdown ? `${breakdown.text} • ` : ''}
+                      {formatValue(inv.metrics[metric.id])}
+                    </p>
+                  </div>
                 </div>
-              </div>
-              <InvestorLogo
-                investor={inv}
-                className="aspect-square h-full max-h-[104px] w-auto rounded-[10px] text-xl"
-              />
-            </Link>
-          ))}
+                <InvestorLogo
+                  investor={inv}
+                  className="aspect-square h-full max-h-[104px] w-auto rounded-[10px] text-xl"
+                />
+              </Link>
+            );
+          })}
         </div>
       </div>
     </section>

@@ -78,7 +78,7 @@ export default function InvestorSearch() {
           onChange={e => { setQuery(e.target.value); setOpen(true); }}
           onFocus={() => setOpen(true)}
           onKeyDown={handleKeyDown}
-          className="h-11 pl-10 pr-3 text-sm md:text-sm"
+          className="h-9 pl-10 pr-3 text-sm md:text-sm"
           aria-label="Search investors"
           aria-autocomplete="list"
           aria-expanded={showDropdown}
