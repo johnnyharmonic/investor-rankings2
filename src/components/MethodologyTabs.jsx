@@ -33,6 +33,7 @@ export default function MethodologyTabs({ activeMetricId }) {
               <Link
                 key={m.id}
                 href={href}
+                scroll={false}
                 aria-current={active ? 'page' : undefined}
                 className={cn(
                   'whitespace-nowrap rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors',
@@ -60,6 +61,7 @@ export default function MethodologyTabs({ activeMetricId }) {
             <Link
               key={m.id}
               href={href}
+              scroll={false}
               aria-current={active ? 'page' : undefined}
               className={cn(
                 'group block px-6 py-5 transition-colors',
