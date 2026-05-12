@@ -31,30 +31,34 @@
     --ring: 0 0% 70%;
     --radius: 0.625rem;
     --hero-glow: 199 95% 50%;
+    /* Background/surface/raised — 3% black overlay on light surfaces. */
+    --surface-raised: rgba(0, 0, 0, 0.03);
   }
 
   .dark {
-    /* Dark theme — Figma reference (#141414 base, #1c1c1c cards) */
-    --background: 0 0% 8%;
+    /* Dark theme — Figma reference (#0d0d0d recessed surface, #1a1a1a cards) */
+    --background: 0 0% 5%;
     --foreground: 0 0% 92%;
-    --card: 0 0% 11%;
+    --card: 0 0% 10%;
     --card-foreground: 0 0% 92%;
-    --popover: 0 0% 13%;
+    --popover: 0 0% 12%;
     --popover-foreground: 0 0% 92%;
     --primary: 0 0% 96%;
-    --primary-foreground: 0 0% 8%;
-    --secondary: 0 0% 16%;
+    --primary-foreground: 0 0% 5%;
+    --secondary: 0 0% 14%;
     --secondary-foreground: 0 0% 92%;
-    --muted: 0 0% 14%;
+    --muted: 0 0% 12%;
     --muted-foreground: 0 0% 40%;
-    --accent: 0 0% 18%;
+    --accent: 0 0% 16%;
     --accent-foreground: 0 0% 96%;
     --destructive: 11 65% 70%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 16%;
-    --input: 0 0% 16%;
-    --ring: 0 0% 35%;
+    --border: 0 0% 13%;
+    --input: 0 0% 14%;
+    --ring: 0 0% 30%;
     --hero-glow: 199 95% 50%;
+    /* Background/surface/raised — #ffffff at 3% opacity per design spec. */
+    --surface-raised: rgba(255, 255, 255, 0.03);
   }
 
   * {
@@ -73,33 +77,19 @@
 }
 
 @layer components {
-  /* Hero positioning context — the actual dot grid is rendered by <HeroDotGrid /> */
+  /* Hero positioning context — the sphere itself is rendered by <HeroDotGrid />. */
   .hero-bg {
     position: relative;
     isolation: isolate;
   }
 
-  /* Base dim dots with a soft radial edge fade */
-  .hero-dot-grid {
-    background-image: radial-gradient(hsl(var(--foreground) / 0.12) 1px, transparent 1px);
-    background-size: 18px 18px;
-    background-position: 0 0;
-    mask-image: radial-gradient(ellipse 90% 90% at 50% 40%, black, transparent 75%);
-    -webkit-mask-image: radial-gradient(ellipse 100% 90% at 50% 40%, black, transparent 75%);
+  /* Hide native scrollbar (used by horizontally-scrolling tab strips). */
+  .scrollbar-none {
+    scrollbar-width: none;
   }
-
-  /* Brighter dots that only reveal in a circle around the mouse */
-  .hero-dot-grid::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: radial-gradient(hsl(var(--foreground) / 0.55) 1px, transparent 1px);
-    background-size: 18px 18px;
-    background-position: 0 0;
-    mask-image: radial-gradient(220px circle at var(--mx) var(--my), black, transparent 70%);
-    -webkit-mask-image: radial-gradient(220px circle at var(--mx) var(--my), black, transparent 70%);
-    opacity: var(--m-opacity, 0);
-    transition: opacity 250ms ease;
-    pointer-events: none;
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
   }
 }
+
+

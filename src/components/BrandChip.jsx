@@ -6,12 +6,16 @@ const SOURCES = [
   domain => `https://www.google.com/s2/favicons?domain=${domain}&sz=128`,
 ];
 
-export default function BrandChip({ domain, name, alt }) {
+export default function BrandChip({ domain, name, alt, bare = false }) {
   const [idx, setIdx] = useState(0);
   const showLogo = idx < SOURCES.length;
 
+  const wrapperClass = bare
+    ? 'inline-flex items-center gap-2'
+    : 'inline-flex items-center gap-2 rounded-full bg-card ring-1 ring-foreground/10 px-3 py-1.5';
+
   return (
-    <div className="inline-flex items-center gap-2 rounded-full bg-card ring-1 ring-foreground/10 px-3 py-1.5">
+    <div className={wrapperClass}>
       <span className="w-4 h-4 flex items-center justify-center overflow-hidden">
         {showLogo && (
           <img

@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Card, CardContent } from '@/components/ui/card';
+import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { HugeiconsIcon } from '@hugeicons/react';
 import { Edit02Icon, Cancel01Icon, Tick02Icon } from '@hugeicons/core-free-icons';
@@ -32,18 +32,15 @@ export default function CorrectionForm({ investorName, investorSlug }) {
     setSubmitted(true);
   }
 
-  if (!open) {
-    return (
-      <Button variant="outline" size="sm" onClick={() => setOpen(true)}>
-        <HugeiconsIcon icon={Edit02Icon} strokeWidth={2} />
-        Submit correction
-      </Button>
-    );
-  }
-
   return (
-    <Card className="bg-muted/30">
-      <CardContent>
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button variant="secondary" size="lg">
+          <HugeiconsIcon icon={Edit02Icon} strokeWidth={2} />
+          Submit correction
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-[28rem]" align="end">
         <div className="flex items-start justify-between mb-4">
           <div>
             <h3 className="font-heading font-semibold text-sm text-foreground">Suggest a data correction</h3>
@@ -123,8 +120,8 @@ export default function CorrectionForm({ investorName, investorSlug }) {
             </Button>
           </form>
         )}
-      </CardContent>
-    </Card>
+      </PopoverContent>
+    </Popover>
   );
 }
 

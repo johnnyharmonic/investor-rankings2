@@ -49,6 +49,9 @@ module.exports = {
           DEFAULT:    'hsl(var(--popover) / <alpha-value>)',
           foreground: 'hsl(var(--popover-foreground) / <alpha-value>)',
         },
+        // Background/surface/raised — alpha is baked into the CSS var
+        // (white/3% in dark theme, black/3% in light theme).
+        'surface-raised': 'var(--surface-raised)',
         // Harmonic & UChicago brand colours (kept for explicit brand pills only)
         harmonic: {
           50:  '#f0f4ff',

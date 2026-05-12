@@ -1,16 +1,11 @@
 import Link from 'next/link';
 import { METRICS, getFilteredInvestors } from '@/data/investors';
-import InvestorSearch from '@/components/InvestorSearch';
 import InvestorLogo from '@/components/InvestorLogo';
 import BrandChip from '@/components/BrandChip';
 import HeroDotGrid from '@/components/HeroDotGrid';
-import MethodologyFilters from '@/components/MethodologyFilters';
-import { parseFilterValues } from '@/lib/filters';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { RANK_GRADIENT, RANK_NUM_COLOR } from '@/lib/rankStyles';
 import { HugeiconsIcon } from '@hugeicons/react';
-import { ArrowRight01Icon } from '@hugeicons/core-free-icons';
+import { ArrowRight01Icon, ArrowDown01Icon } from '@hugeicons/core-free-icons';
 
 export const metadata = {
   title: 'Investor rankings — Harmonic × UChicago',
@@ -18,175 +13,124 @@ export const metadata = {
     'Discover which VCs are most likely to help your company raise follow-on, grow faster, and reach an exit. Objective data-driven rankings for founders.',
 };
 
-export default function HomePage({ searchParams }) {
-  const stages = parseFilterValues(searchParams?.stage);
-  const sectors = parseFilterValues(searchParams?.sector);
-  const geographies = parseFilterValues(searchParams?.geography);
+// Linear-gradient podium tints, lifted from the Figma:
+// gold / silver / copper, anchored top-left, fading toward bottom-right.
+const PODIUM_GRADIENT = [
+  'linear-gradient(117deg, rgba(160, 147, 0, 0.10) 12%, rgba(255, 255, 255, 0.002) 70%)',
+  'linear-gradient(121deg, rgba(255, 255, 255, 0.08) 13%, rgba(255, 255, 255, 0.002) 70%)',
+  'linear-gradient(119deg, rgba(137, 93, 49, 0.10) 11%, rgba(255, 255, 255, 0.002) 70%)',
+];
 
-  const filterParams = new URLSearchParams();
-  if (stages.length) filterParams.set('stage', stages.join(','));
-  if (sectors.length) filterParams.set('sector', sectors.join(','));
-  if (geographies.length) filterParams.set('geography', geographies.join(','));
-  const filterQs = filterParams.toString();
+const PODIUM_NUM_COLOR = ['text-amber-400', 'text-slate-200', 'text-[#cc6600]'];
+
+function MetricSection({ metric }) {
+  const top3 = getFilteredInvestors({
+    sortBy: metric.id,
+    sortDir: 'desc',
+  }).slice(0, 3);
+  const formatValue = v => (metric.unit === '%' ? `${v}%` : `${v} mo`);
 
   return (
+    <section className="px-4 sm:px-6 lg:px-10 py-12 lg:py-16 min-h-[80vh] flex items-center">
+      <div className="w-full max-w-[1540px] mx-auto grid grid-cols-1 lg:grid-cols-[1fr_420px] items-center gap-10 lg:gap-6">
+        {/* Left — title, description, CTA */}
+        <div className="flex flex-col gap-4 lg:px-10 lg:py-4">
+          <h2 className="font-heading text-3xl sm:text-4xl text-foreground tracking-tight leading-[1.1]">
+            {metric.fullLabel}
+          </h2>
+          <p className="text-base/relaxed text-muted-foreground max-w-md">
+            {metric.description}
+          </p>
+          <div>
+            <Button asChild size="lg" variant="secondary">
+              <Link href={`/rankings/${metric.id}`}>
+                See full ranking
+                <HugeiconsIcon icon={ArrowRight01Icon} strokeWidth={2} className="size-3.5" />
+              </Link>
+            </Button>
+          </div>
+        </div>
+
+        {/* Right — 3 stacked podium cards (gold / silver / copper) */}
+        <div className="w-full lg:w-[420px] lg:h-[420px] flex flex-col gap-4">
+          {top3.map((inv, idx) => (
+            <Link
+              key={inv.id}
+              href={`/investors/${inv.slug}`}
+              style={{ backgroundImage: PODIUM_GRADIENT[idx] }}
+              className="group flex-1 min-h-[130px] flex items-center gap-3 rounded-[28px] border border-border dark:border-white/[0.06] p-3.5 backdrop-blur-md transition-colors hover:bg-accent/30"
+            >
+              <div className="flex flex-1 min-w-0 h-full flex-col justify-between p-1.5">
+                <p
+                  className={`font-heading text-xl leading-none tracking-tight ${PODIUM_NUM_COLOR[idx]}`}
+                  style={{ mixBlendMode: 'screen' }}
+                >
+                  {idx + 1}.
+                </p>
+                <div className="flex items-center gap-3 w-full min-w-0">
+                  <p className="font-medium text-foreground text-base/snug truncate flex-1 min-w-0">
+                    {inv.name}
+                  </p>
+                  <p className="font-mono text-xs tabular-nums text-foreground whitespace-nowrap">
+                    {formatValue(inv.metrics[metric.id])}
+                  </p>
+                </div>
+              </div>
+              <InvestorLogo
+                investor={inv}
+                className="aspect-square h-full max-h-[104px] w-auto rounded-[10px] text-xl"
+              />
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export default function HomePage() {
+  return (
     <div>
-      {/* Hero */}
-      <section className="hero-bg px-4 sm:px-6 pt-16 pb-20 sm:pt-24 sm:pb-28">
-        <HeroDotGrid />
-        <div className="max-w-2xl mx-auto flex flex-col items-center text-center">
-          <div className="inline-flex items-center gap-2.5 rounded-full ring-1 ring-foreground/10 bg-card/40 px-2.5 py-1 mb-7">
-            <span className="relative flex size-1.5">
+      <HeroDotGrid />
+
+      {/* Hero — full viewport above the fold */}
+      <section className="relative h-[calc(100vh-3.5rem)] flex items-center justify-center px-4 sm:px-6 py-10">
+        <div className="relative max-w-2xl mx-auto flex flex-col items-center text-center gap-6">
+          <div className="inline-flex items-center gap-2.5 rounded-[14px] bg-card/60 px-3 py-1">
+            <span className="relative flex size-1">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sky-400 opacity-75" />
-              <span className="relative inline-flex size-1.5 rounded-full bg-sky-400" />
+              <span className="relative inline-flex size-1 rounded-full bg-sky-400" />
             </span>
-            <span className="text-[0.625rem] font-mono uppercase tracking-wider text-muted-foreground">
+            <span className="text-[0.625rem] font-mono uppercase tracking-wider text-foreground">
               Real time data
             </span>
           </div>
 
-          <h1 className="font-heading text-4xl sm:text-5xl tracking-tight leading-[1.05] mb-3">
-            <span className="block text-foreground">Find your next investor</span>
+          <h1 className="font-heading text-4xl sm:text-[2.25rem] tracking-tight leading-[1.05]">
+            <span className="block text-foreground">Discover your next investor</span>
             <span className="block text-muted-foreground/70">200K+ investors, ranked.</span>
           </h1>
 
-          <div className="w-full max-w-xl mt-8">
-            <InvestorSearch />
-          </div>
-
-          <div className="mt-12 flex flex-col items-center gap-3">
-            <span className="text-[0.625rem] uppercase tracking-wider text-muted-foreground">
-              Presented by
-            </span>
-            <div className="inline-flex items-center gap-3">
-              <BrandChip domain="harmonic.ai" name="Harmonic" alt="Harmonic" />
-              <span className="text-muted-foreground text-xs">×</span>
-              <BrandChip domain="uchicago.edu" name="University of Chicago" alt="UChicago" />
+          <div className="flex flex-col items-center gap-2 mt-2">
+            <span className="text-[0.625rem] uppercase tracking-wider text-muted-foreground">Presented by</span>
+            <div className="inline-flex items-center gap-1.5 rounded-[14px] border border-border dark:border-white/[0.07] bg-card/60 pl-3.5 pr-2.5 py-2">
+              <BrandChip domain="harmonic.ai" name="Harmonic" alt="Harmonic" bare />
+              <span className="text-foreground/60 text-xs">×</span>
+              <BrandChip domain="uchicago.edu" name="University of Chicago" alt="UChicago" bare />
             </div>
           </div>
         </div>
-      </section>
 
-      {/* Explore investors */}
-      <section className="px-4 sm:px-6 pb-12">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-6">
-            <div className="flex flex-col items-center mb-1.5">
-              <h2 className="font-heading text-2xl sm:text-3xl font-medium text-foreground tracking-tight mb-1.5">
-                <span className="block">Explore top investors</span>
-                <span className="block text-muted-foreground">based on objective data</span>
-              </h2>
-            </div>
-
-          </div>
-
-          <div className="flex flex-col items-center justify-center gap-2 mb-8">
-            <MethodologyFilters />
-            <p className="text-xs/relaxed text-muted-foreground">
-              Apply filters to narrow down investors by focus areas. 
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {Object.values(METRICS).map(m => {
-              const filtered = getFilteredInvestors({
-                stage: stages,
-                sector: sectors,
-                geography: geographies,
-                sortBy: m.id,
-                sortDir: 'desc',
-              });
-              const top3 = filtered.slice(0, 3);
-              const formatValue = v => (m.unit === '%' ? `${v}%` : `${v} mo`);
-              const href = filterQs ? `/rankings/${m.id}?${filterQs}` : `/rankings/${m.id}`;
-              return (
-                <Card key={m.id} className="gap-0 py-0 transition-colors rounded-[28px]">
-                  <div className="px-5 pt-5 pb-5">
-                    <h3 className="font-heading text-base font-semibold text-foreground leading-snug mb-1.5">
-                      {m.fullLabel}
-                    </h3>
-                    <p className="text-xs/relaxed text-muted-foreground">
-                      {m.description}
-                    </p>
-                  </div>
-
-                  <div className="px-3">
-                    {top3.length === 0 ? (
-                      <p className="text-xs text-muted-foreground py-6 text-center">
-                        No investors match these filters.
-                      </p>
-                    ) : (
-                      <ol className="space-y-2">
-                        {top3.map((inv, idx) => (
-                          <li key={inv.id}>
-                            <Link
-                              href={`/investors/${inv.slug}`}
-                              style={{ backgroundImage: RANK_GRADIENT[idx] }}
-                              className="flex items-center gap-3 px-4 py-2.5 rounded-2xl ring-1 ring-foreground/5 hover:bg-accent/40 transition-colors"
-                            >
-                              <span className={`w-4 text-xs font-semibold tabular-nums flex-shrink-0 ${RANK_NUM_COLOR[idx]}`}>
-                                {idx + 1}.
-                              </span>
-                              <InvestorLogo
-                                investor={inv}
-                                className="w-7 h-7 rounded-md text-[0.6rem] flex-shrink-0"
-                              />
-                              <span className="font-medium text-foreground text-sm/snug truncate flex-1 min-w-0">
-                                {inv.name}
-                              </span>
-                              <span className="font-semibold text-foreground tabular-nums text-sm whitespace-nowrap">
-                                {formatValue(inv.metrics[m.id])}
-                              </span>
-                            </Link>
-                          </li>
-                        ))}
-                      </ol>
-                    )}
-                  </div>
-
-                  <div className="py-4 pl-5 pr-3 flex items-center justify-between gap-3">
-                    <span className="text-[0.6875rem] text-muted-foreground tabular-nums">
-                      Top {top3.length} of 25
-                    </span>
-                    <Button asChild size="sm" variant="secondary" className="h-8">
-                      <Link href={href}>
-                        See full ranking
-                        <HugeiconsIcon
-                          icon={ArrowRight01Icon}
-                          strokeWidth={2}
-                          className="size-3"
-                        />
-                      </Link>
-                    </Button>
-                  </div>
-                </Card>
-              );
-            })}
-          </div>
+        <div className="pointer-events-none absolute inset-x-0 bottom-8 flex flex-col items-center gap-2 text-foreground/80 animate-bounce">
+          <span className="text-xs font-mono uppercase tracking-[0.15em]">Scroll</span>
+          <HugeiconsIcon icon={ArrowDown01Icon} strokeWidth={2.5} className="size-5" />
         </div>
       </section>
 
-      {/* Bottom CTA banner */}
-      <section className="px-4 sm:px-6 pb-20">
-        <div className="max-w-6xl mx-auto">
-          <Card className="rounded-[28px] p-4">
-            <CardContent className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-              <div>
-                <p className="font-heading font-semibold text-foreground text-sm mb-1">
-                  A co-published, data-driven ranking of 200K+ investors
-                </p>
-                <p className="text-xs text-muted-foreground">Powered by Harmonic data</p>
-              </div>
-              <Button asChild size="lg" variant="secondary">
-                <Link href="/methodology">
-                  Learn more
-                  <HugeiconsIcon icon={ArrowRight01Icon} strokeWidth={2} className="size-3" />
-                </Link>
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-      </section>
+      {/* Three full-width metric sections */}
+      {Object.values(METRICS).map(m => (
+        <MetricSection key={m.id} metric={m} />
+      ))}
     </div>
   );
 }

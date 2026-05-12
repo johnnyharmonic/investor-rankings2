@@ -3,8 +3,8 @@ import { useState } from 'react';
 import { cn } from '@/lib/utils';
 
 const SOURCES = [
+  domain => `https://www.google.com/s2/favicons?domain=${domain}&sz=256`,
   domain => `https://icons.duckduckgo.com/ip3/${domain}.ico`,
-  domain => `https://www.google.com/s2/favicons?domain=${domain}&sz=128`,
 ];
 
 export default function InvestorLogo({ investor, className }) {
