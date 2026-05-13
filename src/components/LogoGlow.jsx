@@ -6,7 +6,7 @@ export default function LogoGlow({ investor }) {
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none fixed -top-[200px] -left-[200px] w-[700px] h-[700px] -z-10 opacity-15 dark:opacity-30"
+      className="pointer-events-none absolute -top-[350px] -left-[200px] w-[700px] h-[700px] -z-10 opacity-15 dark:opacity-30"
     >
       <img
         src={`https://www.google.com/s2/favicons?domain=${investor.domain}&sz=128`}

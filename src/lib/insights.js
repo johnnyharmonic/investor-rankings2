@@ -172,8 +172,12 @@ export function scopePillLabel(combo = {}) {
 
 export function scopeLabel({ type, stage, sector, geography } = {}) {
   if (!type && !stage && !sector && !geography) return 'among all investors';
-  const subj = type ? TYPE_NOUN[type] ?? 'investors' : 'investors';
-  const parts = [`among ${subj}`];
+  if (type) return `among ${TYPE_NOUN[type] ?? 'investors'}`;
+  if (stage) return `among investors that focus in ${stage}`;
+  if (sector) return `among investors that focus in ${sector}`;
+  if (geography) return `among investors that focus in ${GEO_PHRASE[geography] ?? geography}`;
+  // Fallback retained for any unexpected combo shape.
+  const parts = [`among investors`];
   if (sector) parts.push(`focused on ${sector}`);
   if (stage) parts.push(`at the ${stage} stage`);
   if (geography) parts.push(`in ${GEO_PHRASE[geography] ?? geography}`);

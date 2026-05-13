@@ -27,7 +27,7 @@ export default function ShareButton() {
   }
 
   return (
-    <Button variant="outline" size="lg" onClick={copy} aria-label="Copy share link">
+    <Button variant="outline" size="lg" onClick={copy} aria-label="Copy share link" className="w-full justify-center">
       <HugeiconsIcon icon={copied ? Tick02Icon : Share08Icon} strokeWidth={2} />
       {copied ? 'Link copied' : 'Share'}
     </Button>

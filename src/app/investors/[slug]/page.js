@@ -92,10 +92,10 @@ export default function InvestorPage({ params }) {
       )}
 
       <div className="flex items-center gap-2 flex-wrap mb-20">
-        <ProfilePill label={typeShort(inv.primaryType)} title={inv.primaryType} tint={typeTint(inv.primaryType)} />
-        <ProfilePill label={inv.stage} tint={stageTint(inv.stage)} />
-        <ProfilePill label={inv.sector} tint={sectorTint(inv.sector)} />
-        <ProfilePill label={inv.geography} tint="bg-violet-500/10 text-violet-700 dark:text-violet-300 ring-violet-500/20" />
+        <ProfilePill label={inv.primaryType} tint={typeTint(inv.primaryType)} />
+        <ProfilePill label={`${inv.stage} focus`} tint={stageTint(inv.stage)} />
+        <ProfilePill label={`${inv.sector} focus`} tint={sectorTint(inv.sector)} />
+        <ProfilePill label={`${inv.geography} focus`} tint="bg-violet-500/10 text-violet-700 dark:text-violet-300 ring-violet-500/20" />
       </div>
 
       {/* Highlights */}

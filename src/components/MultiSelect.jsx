@@ -45,7 +45,8 @@ export default function MultiSelect({ values, onChange, options, placeholder }) 
         <PopoverPrimitive.Content
           align="start"
           sideOffset={6}
-          className="z-50 min-w-[180px] rounded-md border bg-popover text-popover-foreground shadow-md p-1 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
+          collisionPadding={16}
+          className="z-50 min-w-[180px] max-h-[min(60vh,320px)] overflow-y-auto rounded-md border bg-popover text-popover-foreground shadow-md p-1 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
         >
           <button
             type="button"

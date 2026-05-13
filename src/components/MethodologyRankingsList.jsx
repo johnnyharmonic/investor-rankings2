@@ -12,7 +12,7 @@ import { cn } from '@/lib/utils';
 
 // Shared grid template for header + rows so columns align perfectly.
 const GRID_COLS =
-  'grid-cols-[40px_minmax(0,1.5fr)_minmax(0,1fr)_minmax(0,0.8fr)_minmax(0,1fr)_minmax(0,1.2fr)_minmax(0,0.8fr)]';
+  'grid-cols-[40px_minmax(0,1.5fr)_minmax(0,1fr)_minmax(0,1.1fr)_minmax(0,1fr)_minmax(0,1.2fr)_minmax(0,0.8fr)]';
 
 const TABLE_LIMIT = 25;
 
@@ -109,7 +109,7 @@ export default function MethodologyRankingsList({ metric }) {
                     <span className="font-mono text-sm font-medium text-foreground tabular-nums whitespace-nowrap">
                       {formatValue(value)}
                     </span>
-                    <Pill label={typeShort(inv.primaryType)} title={inv.primaryType} tint={typeTint(inv.primaryType)} />
+                    <Pill label={inv.primaryType} tint={typeTint(inv.primaryType)} truncate />
                     <Pill label={inv.stage} tint={stageTint(inv.stage)} />
                     <Pill label={inv.sector} tint={sectorTint(inv.sector)} truncate />
                     <Pill label={inv.geography} tint="bg-violet-500/10 text-violet-700 dark:text-violet-300 ring-violet-500/20" />
@@ -142,7 +142,7 @@ export default function MethodologyRankingsList({ metric }) {
                   <div className="min-w-0 flex-1">
                     <p className="text-sm font-medium text-foreground truncate">{inv.name}</p>
                     <div className="flex items-center gap-1.5 mt-1 overflow-hidden">
-                      <Pill label={typeShort(inv.primaryType)} tint={typeTint(inv.primaryType)} />
+                      <Pill label={inv.primaryType} tint={typeTint(inv.primaryType)} truncate />
                       <Pill label={inv.stage} tint={stageTint(inv.stage)} />
                       <Pill label={inv.sector} tint={sectorTint(inv.sector)} truncate />
                     </div>

@@ -32,11 +32,14 @@ export default function Header() {
           <div className="flex-1 flex items-center justify-end gap-1 min-w-0">
             <nav className="hidden md:flex items-center gap-1 flex-shrink-0">
               <Button asChild variant="ghost" size="sm">
+                <Link href="/rankings/m1">Explore investors</Link>
+              </Button>
+              <Button asChild variant="ghost" size="sm">
                 <Link href="/methodology">About</Link>
               </Button>
               <Button asChild variant="ghost" size="sm">
                 <a href="https://harmonic.ai" target="_blank" rel="noopener noreferrer">
-                  Explore Harmonic
+                  View Harmonic
                 </a>
               </Button>
               <span className="ml-1">
@@ -64,11 +67,14 @@ export default function Header() {
               <InvestorSearch />
             </div>
             <Button asChild variant="ghost" size="sm" className="justify-start">
+              <Link href="/rankings/m1" onClick={() => setMenuOpen(false)}>Explore investors</Link>
+            </Button>
+            <Button asChild variant="ghost" size="sm" className="justify-start">
               <Link href="/methodology" onClick={() => setMenuOpen(false)}>About</Link>
             </Button>
             <Button asChild variant="ghost" size="sm" className="justify-start">
               <a href="https://harmonic.ai" target="_blank" rel="noopener noreferrer">
-                Explore Harmonic
+                View Harmonic
               </a>
             </Button>
           </div>
