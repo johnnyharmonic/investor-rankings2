@@ -2,7 +2,7 @@ import { investors, METRICS } from '@/data/investors';
 
 // Insights are limited to "higher is better" metrics — the three visible ones.
 // Cohort must be at least MIN_COHORT to avoid trivially small slices
-// (e.g. "#1 among 3 secondary funds in Austin").
+// (e.g. "#1 among 3 secondary funds in Singapore").
 const TOP_N = 10;
 const MIN_COHORT = 20;
 
@@ -138,12 +138,11 @@ const TYPE_NOUN = {
   'Strategic Corporate': 'strategic corporates',
 };
 
+// Optional phrasings for specific country labels — most read fine as-is
+// (e.g. "among investors that focus in Germany"), so this map is small.
 const GEO_PHRASE = {
-  'SF Bay Area': 'the SF Bay Area',
-  'New York': 'New York',
-  'Boston': 'Boston',
-  'Los Angeles': 'Los Angeles',
-  'Austin': 'Austin',
+  'USA': 'the USA',
+  'United Kingdom': 'the United Kingdom',
 };
 
 // Ordinal suffix for a positive integer (1 → 1st, 2 → 2nd, 3 → 3rd, 4 → 4th, …).

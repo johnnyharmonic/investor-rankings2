@@ -70,6 +70,9 @@ function buildNodes(count) {
       sizeMul: 0.7 + Math.random() * 0.8,
       color,
       colored,
+      // Per-node mouse-repel displacement that smoothly lerps back to 0.
+      repelX: 0,
+      repelY: 0,
     });
   }
   return nodes;
@@ -106,6 +109,22 @@ export default function HeroDotGrid() {
 
     resize();
     window.addEventListener('resize', resize);
+
+    // Mouse-repel: track pointer in viewport coords. The canvas is fixed
+    // at 0,0 so viewport coords map directly. `mouseActive=false` smoothly
+    // pulls every dot back to its base position via the lerp below.
+    const mouse = { x: 0, y: 0, active: false };
+    function onMove(e) {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+      mouse.active = true;
+    }
+    function onLeave() {
+      mouse.active = false;
+    }
+    window.addEventListener('pointermove', onMove);
+    window.addEventListener('pointerleave', onLeave);
+    window.addEventListener('blur', onLeave);
 
     const nodes = buildNodes(NODE_COUNT);
 
@@ -208,9 +227,36 @@ export default function HeroDotGrid() {
         const yr = cosX * by - sinX * zr1;
         const zr = sinX * by + cosX * zr1;
 
+        // Project to screen space.
+        const baseX = cx + xr * radius;
+        const baseY = cy + yr * radius;
+
+        // Mouse-repel: when the cursor is within REPEL_RADIUS px of a dot's
+        // projected position, push the dot outward along the cursor→dot
+        // vector. Strength tapers quadratically with distance. The target
+        // displacement is lerped into `repelX/Y` each frame so dots ease
+        // toward repulsion and ease back to their base position.
+        let targetRx = 0;
+        let targetRy = 0;
+        if (mouse.active && !reduceMotion) {
+          const dx = baseX - mouse.x;
+          const dy = baseY - mouse.y;
+          const distSq = dx * dx + dy * dy;
+          const REPEL_RADIUS = 110;
+          if (distSq < REPEL_RADIUS * REPEL_RADIUS && distSq > 0.001) {
+            const dist = Math.sqrt(distSq);
+            const falloff = 1 - dist / REPEL_RADIUS;
+            const strength = falloff * falloff * 38;
+            targetRx = (dx / dist) * strength;
+            targetRy = (dy / dist) * strength;
+          }
+        }
+        p.repelX += (targetRx - p.repelX) * 0.18;
+        p.repelY += (targetRy - p.repelY) * 0.18;
+
         transformed[i] = {
-          px: cx + xr * radius,
-          py: cy + yr * radius,
+          px: baseX + p.repelX,
+          py: baseY + p.repelY,
           z: zr,
           fadeIn,
         };
@@ -242,6 +288,9 @@ export default function HeroDotGrid() {
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener('resize', resize);
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerleave', onLeave);
+      window.removeEventListener('blur', onLeave);
     };
   }, []);
 

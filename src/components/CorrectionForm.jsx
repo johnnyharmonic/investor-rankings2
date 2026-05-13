@@ -10,6 +10,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { HugeiconsIcon } from '@hugeicons/react';
 import { Edit02Icon, Cancel01Icon, Tick02Icon } from '@hugeicons/core-free-icons';
 
+// High-contrast field styling for the correction dialog — the default
+// Input/Textarea/SelectTrigger borders blend into the popover surface.
+const FIELD_BASE = 'bg-background border-foreground/20 text-sm';
+const FIELD_INPUT = `h-9 ${FIELD_BASE}`;
+
 export default function CorrectionForm({ investorName, investorSlug }) {
   const [open, setOpen] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -78,14 +83,13 @@ export default function CorrectionForm({ investorName, investorSlug }) {
             <div className="space-y-1.5">
               <Label htmlFor="metric">Metric in question</Label>
               <Select value={form.metric} onValueChange={v => setForm(f => ({ ...f, metric: v }))} required>
-                <SelectTrigger id="metric" className="w-full">
+                <SelectTrigger id="metric" className={`w-full ${FIELD_INPUT}`}>
                   <SelectValue placeholder="Select a metric" />
                 </SelectTrigger>
                 <SelectContent>
                   {Object.values(METRICS).map(m => (
                     <SelectItem key={m.id} value={m.id}>{m.fullLabel}</SelectItem>
                   ))}
-                  <SelectItem value="composite">Composite score / Overall ranking</SelectItem>
                   <SelectItem value="other">Other</SelectItem>
                 </SelectContent>
               </Select>
@@ -100,6 +104,7 @@ export default function CorrectionForm({ investorName, investorSlug }) {
                 required
                 rows={3}
                 placeholder="Describe the issue with the current data..."
+                className={FIELD_BASE}
               />
             </div>
             <div className="space-y-1.5">
@@ -113,6 +118,7 @@ export default function CorrectionForm({ investorName, investorSlug }) {
                 onChange={handleChange}
                 rows={2}
                 placeholder="Links, documents, or data sources that support your correction..."
+                className={FIELD_BASE}
               />
             </div>
             <Button type="submit" className="w-full" size="lg">
@@ -137,6 +143,7 @@ function Field({ label, name, value, onChange, placeholder, type = 'text', requi
         onChange={onChange}
         placeholder={placeholder}
         required={required}
+        className={FIELD_INPUT}
       />
     </div>
   );

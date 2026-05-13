@@ -3,7 +3,6 @@ import { useState, useRef, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
 import InvestorLogo from '@/components/InvestorLogo';
 import { HugeiconsIcon } from '@hugeicons/react';
 import { Search01Icon } from '@hugeicons/core-free-icons';
@@ -106,11 +105,12 @@ export default function InvestorSearch() {
                     <InvestorLogo investor={inv} className="w-8 h-8 rounded-md text-[0.625rem]" />
                     <div className="min-w-0 flex-1">
                       <p className="text-sm font-medium text-foreground truncate">{inv.name}</p>
-                      <p className="text-[0.625rem] text-muted-foreground truncate">
-                        {inv.fund !== inv.name ? `${inv.fund} · ` : ''}{inv.stage} · {inv.geography}
-                      </p>
+                      {inv.domain && (
+                        <p className="text-[0.625rem] text-muted-foreground truncate">
+                          {inv.domain}
+                        </p>
+                      )}
                     </div>
-                    <Badge variant="outline">#{inv.rank}</Badge>
                   </Link>
                 </li>
               ))}

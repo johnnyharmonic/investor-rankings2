@@ -55,9 +55,9 @@ export default function MethodologyPage() {
           ensuring the metrics are robust, reproducible, and not gameable.
         </p>
         <p className="mt-3">
-          Each investor is evaluated across a set of outcome-based metrics. These are then combined into
-          a composite score (0–100) using a weighted average, with weights determined by the UChicago team
-          based on their relevance to founder outcomes.
+          Each investor is evaluated across a set of outcome-based metrics — Next round probability,
+          Follow-on probability, and Exit probability — that are computed independently and surfaced
+          as separate rankings.
         </p>
       </Section>
 
@@ -168,14 +168,6 @@ export default function MethodologyPage() {
             </Card>
           ))}
         </div>
-      </Section>
-
-      <Section title="Composite score">
-        <p>
-          The composite score (0–100) is a weighted average of the visible outcome metrics. Metrics are
-          normalized to a 0–100 scale relative to the distribution of all investors in the dataset. Weights
-          are set by the UChicago research team and will be published in their forthcoming academic paper.
-        </p>
       </Section>
 
       <Section title="Coverage & eligibility">
